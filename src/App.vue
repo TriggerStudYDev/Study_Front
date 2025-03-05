@@ -1,26 +1,21 @@
+<!-- src/App.vue -->
 <template>
     <div>
-        <header class="mb-10">
-            <Header />
-        </header>
-        <main v-if="authStore.isAuth" class="mx-10">
+        <main class="">
             <RouterView />
         </main>
-        <main v-else class="mx-10">
-            <RegisterPages />
-        </main>
-        <footer class="mt-10">
-            <Footer />
-        </footer>
     </div>
 </template>
 
 <script setup>
-import Header from './widgets/TheHeader.vue';
-import Footer from './widgets/TheFooter.vue';
-import RegisterPages from './pages/RegisterPages.vue';
-import { useAuthStore } from './stores/auth';
+import { useAuthStore } from './stores/useAuthStore';
+import { onMounted } from 'vue';
 
 const authStore = useAuthStore();
 
+onMounted(() => {
+    authStore.checkAuth();
+});
+
+authStore.initializeMockData();
 </script>
