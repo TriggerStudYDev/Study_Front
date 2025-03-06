@@ -111,58 +111,32 @@ export const useAuthStore = defineStore("auth", {
       };
 
       try {
-        await userDataService
-          .login(data)
-          .then(async (response) => {
-            sessionStorage.setItem("access_token", response.data.access_token);
-            sessionStorage.setItem("user", response.data.user.role);
-            localStorage.setItem("user_id", response.data.user.id);
-            this.isAuth = true;
-            this.userRole = response.data.user.role;
+        const response = await userDataService.login(data);
 
-            if (response.data.user.is_start_auth === false) {
-              router.push({ name: "success-questionnaire" });
-              return;
-            }
-            const checkStore = useCheckStore();
-            const status = checkStore.checkVerificationStatus();
-            const currentStaus = status.data.status;
-            this.verificationStatus = currentStaus;
+        sessionStorage.setItem("access_token", response.data.access_token);
+        sessionStorage.setItem("user", response.data.user.role);
+        localStorage.setItem("user_id", response.data.user.id);
 
-            const routeName = await checkStore.handleStatusResponse(
-              statusResponse.data
-            );
-            router.push({ name: routeName });
-            return { success: true, data: response.data };
-          })
-          .catch((e) => {
-            console.log(e);
-            this.resetAuthState();
-            sessionStorage.clear();
-          });
+        this.isAuth = true;
+        this.userRole = response.data.user.role;
+
+        if (response.data.user.is_start_auth) {
+          await router.push({ name: "success-questionnaire" });
+          return { success: true };
+        }
+        const checkStore = useCheckStore();
+        const statusData = await checkStore.checkVerificationStatus();
+        const routeName = checkStore.handleStatusResponse(statusData.status);
+        await router.push({ name: routeName });
+        return { success: true };
       } catch (error) {
-        console.error("Ошибка авторизации:", {
-          status: error.response?.status,
-          data: error.response?.data,
-          message: error.message,
-        });
+        console.error("Ошибка авторизации:", error);
+        this.resetAuthState();
+        sessionStorage.clear();
         throw error;
       }
     },
 
-    getRedirectRoute(status) {
-      const editStatuses = [
-        "Отправлен на доработку",
-        "Отклонена верификация по СБ",
-        "Отклонена анкета исполнителя",
-      ];
-
-      return editStatuses.includes(status)
-        ? "questionnaire"
-        : status === "Принят"
-        ? "home"
-        : "sending-questionnaire";
-    },
     checkAuth() {
       const token = sessionStorage.getItem("access_token");
       const role = sessionStorage.getItem("user");

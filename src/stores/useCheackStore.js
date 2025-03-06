@@ -7,31 +7,38 @@ export const useCheckStore = defineStore("check", {
     async checkVerificationStatus() {
       try {
         const user_id = localStorage.getItem("user_id");
-        await UserDataService.chechStatusVerification(user_id).then(
-          (response) => {
-            this.handleStatusResponse(response);
-            return response.data;
-          }
-        );
-      } catch (error) {
-        console.log(error);
+
         if (!user_id) {
-          console.error("User ID not found in localStorage");
-          throw new Error("Требуется повторная авторизация");
+          throw new Error("User ID not found in localStorage");
         }
+
+        const response = await UserDataService.chechStatusVerification(user_id);
+
+        return response.data;
+      } catch (error) {
+        console.error("Ошибка проверки статуса:", error);
+        throw error;
       }
     },
 
-    async handleStatusResponse(response) {
+    handleStatusResponse(status) {
       const statusMap = {
         "На проверке": "sending-questionnaire",
         "Повторная проверка": "sending-questionnaire",
         "Отклонена верификация по СБ": "unshaked-questionnaire",
         "Отклонена анкета исполнителя": "unshaked-questionnaire",
         "Отправлен на доработку": "questionnaire",
+        Принят: "home",
       };
 
-      return statusMap[response.status] || "404";
+      const route = statusMap[status];
+
+      if (!route) {
+        console.warn("Неизвестный статус:", status);
+        return "404";
+      }
+
+      return route;
     },
   },
 });

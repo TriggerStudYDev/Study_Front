@@ -37,7 +37,6 @@ const handleLogin = async () => {
         const result = await authStore.login();
         if (result.success) {
             authStore.checkAuth()
-            router.push({ name: 'home' })
         } else {
             console.error(result.message);
         }

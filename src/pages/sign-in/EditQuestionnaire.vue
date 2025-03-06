@@ -4,7 +4,7 @@
         <header>
             <QuestionnaireTable />
         </header>
-        <main>
+        <main class="mt-6">
             <router-view />
         </main>
     </div>
