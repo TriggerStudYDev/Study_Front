@@ -122,28 +122,3 @@ onMounted(() => {
     authStore.referralCode()
 }) 
 </script>
-
-<style scoped>
-@keyframes slideUp {
-    from {
-        transform: translateY(100%);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.slide-up {
-    animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
-    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.backface-hidden {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-</style>
