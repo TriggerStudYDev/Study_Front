@@ -21,8 +21,8 @@ export const useAuthStore = defineStore("auth", {
         email: "",
         password: "",
         role: "исполнитель",
-        // referral_code: "", // Ошибка 500 с сервера
       },
+      referrer_code: "",
       profile: {
         university: null,
         faculty: null,
@@ -43,17 +43,19 @@ export const useAuthStore = defineStore("auth", {
       const route = useRoute();
       const referralCode = route.query.referral_code;
       if (referralCode) {
-        await userDataService.referral_code(referralCode).then((response) => {
-          if (response.status === 200) {
-            this.data.user.referral_code = referralCode;
-          }
-        });
+        await userDataService
+          .getReferral_code(referralCode)
+          .then((response) => {
+            if (response.status === 200) {
+              this.data.referrer_code = referralCode;
+            }
+          });
       }
     },
 
     async register() {
       try {
-        await userDataService.register(this.data).then((response) => {
+        await userDataService.postRegister(this.data).then((response) => {
           this.isRegistered = true;
           this.userId = response.data.user_id;
           this.profileId = response.data.profile_id;
@@ -111,7 +113,7 @@ export const useAuthStore = defineStore("auth", {
       };
 
       try {
-        const response = await userDataService.login(data);
+        const response = await userDataService.postLogin(data);
 
         sessionStorage.setItem("access_token", response.data.access_token);
         sessionStorage.setItem("user", response.data.user.role);

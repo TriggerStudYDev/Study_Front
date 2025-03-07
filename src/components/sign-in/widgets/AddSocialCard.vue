@@ -31,6 +31,7 @@ const modalStore = useModalStore();
 const profile = computed(() => authStore.data.profile);
 const authStore = useAuthStore();
 const { closeModal } = modalStore;
+const animation = ref(false)
 
 const props = defineProps({
     socialType: {

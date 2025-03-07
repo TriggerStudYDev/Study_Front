@@ -10,15 +10,13 @@ const authRoutes = [
       {
         name: "register",
         path: "register",
-        component: () =>
-          import("@/components/sign-in/register/RegisterForm.vue"),
+        component: () => import("@/pages/sign-in/RegisterForm.vue"),
         meta: { requiresGuest: true, requiresAuthCheck: true },
       },
       {
         name: "login",
         path: "login",
-        component: () =>
-          import("@/components/sign-in/login/AuthorizationForm.vue"),
+        component: () => import("@/pages/sign-in/AuthorizationForm.vue"),
         meta: { requiresGuest: true, requiresVerificationCheck: true },
       },
     ],

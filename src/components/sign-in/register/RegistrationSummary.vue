@@ -17,7 +17,8 @@
                 <template #input>
                     <input
                         class="w-full px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
-                        type="text" :placeholder="!fileSelected ? 'Отзывы заказчиков' : 'Выбран файл: ' + fileName">
+                        type="text" :placeholder="!fileSelected ? 'Отзывы заказчиков' : 'Выбран файл: ' + fileName"
+                        disabled>
                     <span class="text-TeriaryDark text-xs font-medium px-4 mt-1">Подсказка PNG, JPG</span>
                 </template>
             </LoadingFilesForRegistration>
@@ -25,7 +26,7 @@
                 <template #input>
                     <input
                         class="w-full px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
-                        type="text" :placeholder="!fileSelected ? 'Портфолио' : 'Выбран файл: ' + fileName">
+                        type="text" :placeholder="!fileSelected ? 'Портфолио' : 'Выбран файл: ' + fileName" disabled>
                     <span class="text-TeriaryDark text-xs font-medium px-4 mt-1">Подсказка PNG, JPG</span>
                 </template>
             </LoadingFilesForRegistration>

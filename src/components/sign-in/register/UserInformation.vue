@@ -108,7 +108,8 @@ const isFormValid = computed(() => {
         auth.value.first_name.trim() !== '' &&
         auth.value.email.trim() !== '' &&
         auth.value.password.trim() !== '' &&
-        auth.value.password === passwordRepeat.value
+        auth.value.password === passwordRepeat.value &&
+        isAgreementChecked.value
 });
 
 watchEffect(() => {

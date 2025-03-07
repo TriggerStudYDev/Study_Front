@@ -1,15 +1,15 @@
 import http from "../http-common";
 
 export default {
-  login(user) {
+  postLogin(user) {
     return http.post("api/auth/login/", user);
   },
 
-  register(user) {
+  postRegister(user) {
     return http.post("api/auth/register/", user);
   },
 
-  referral_code(user) {
+  getReferral_code(user) {
     return http.get(`api/auth/referral-check/?referral_code=${user}`);
   },
 
@@ -41,7 +41,7 @@ export default {
     return http.get(`api/auth/discipline/?department_id=${educationFormId}`);
   },
 
-  chechStatusVerification(userId) {
+  postChechStatusVerification(userId) {
     return http.post("/api/auth/status-verification-check/", {
       user_id: userId,
     });

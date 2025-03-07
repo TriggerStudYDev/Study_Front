@@ -12,7 +12,9 @@ export const useCheckStore = defineStore("check", {
           throw new Error("User ID not found in localStorage");
         }
 
-        const response = await UserDataService.chechStatusVerification(user_id);
+        const response = await UserDataService.postChechStatusVerification(
+          user_id
+        );
 
         return response.data;
       } catch (error) {
