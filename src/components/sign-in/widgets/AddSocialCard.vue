@@ -25,13 +25,13 @@
 <script setup>
 import { useModalStore } from '@/stores/useModalStore';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 const modalStore = useModalStore();
+const emit = defineEmits(['file-selected']);
 const profile = computed(() => authStore.data.profile);
 const authStore = useAuthStore();
 const { closeModal } = modalStore;
-const animation = ref(false)
 
 const props = defineProps({
     socialType: {
@@ -40,8 +40,6 @@ const props = defineProps({
         validator: value => ['telegram', 'vk'].includes(value),
     },
 });
-
-const socialValue = ref('');
 
 const socialData = computed(() => {
     return {
@@ -66,28 +64,3 @@ const saveSocial = () => {
     closeModal();
 };
 </script>
-
-<style scoped>
-@keyframes slideUp {
-    from {
-        transform: translateY(100%);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.slide-up {
-    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
-    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.fixed {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-</style>

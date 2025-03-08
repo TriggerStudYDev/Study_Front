@@ -1,62 +1,85 @@
 <!-- src/components/sign-in/register/StudentСard.vue -->
 <template>
     <div>
-
         <div class="grid grid-cols-2 gap-4">
             <!-- Университеты -->
-            <select v-model="selectedUniversity" @change="fetchFaculties" :disabled="loading"
-                class="col-span-2 px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none">
-                <option value="" disabled>ВУЗ</option>
-                <option v-for="university in universities" :key="university.id" :value="university.id">
-                    {{ university.name }}
-                </option>
-            </select>
+            <div class="col-span-2">
+                <select v-model="selectedUniversity" @change="fetchFaculties" :disabled="loading"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    :class="{ 'border-red-500': errors.universities }">
+                    <option value="" disabled>ВУЗ</option>
+                    <option v-for="university in universities" :key="university.id" :value="university.id">
+                        {{ university.name }}
+                    </option>
+                </select>
+                <span v-if="errors.universities" class="text-red-500 text-sm">{{ errors.universities }}</span>
+            </div>
 
             <!-- Факультеты -->
-            <select v-model="selectedFaculty" @change="fetchDepartments" :disabled="!selectedUniversity || loading"
-                class="col-span-2 px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none">
-                <option value="" disabled>
-                    {{ faculties.length ? 'Выберите факультет' : 'Нет доступных факультетов' }}
-                </option>
-                <option v-for="faculty in faculties" :key="faculty.id" :value="faculty.id">
-                    {{ faculty.name }}
-                </option>
-            </select>
+            <div class="col-span-2">
+                <select v-model="selectedFaculty" @change="fetchDepartments" :disabled="!selectedUniversity || loading"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    :class="{ 'border-red-500': errors.faculties }">
+                    <option value="" disabled>
+                        {{ faculties.length ? 'Выберите факультет' : 'Нет доступных факультетов' }}
+                    </option>
+                    <option v-for="faculty in faculties" :key="faculty.id" :value="faculty.id">
+                        {{ faculty.name }}
+                    </option>
+                </select>
+                <span v-if="errors.faculties" class="text-red-500 text-sm">{{ errors.faculties }}</span>
+            </div>
 
             <!-- Кафедры -->
-            <select v-model="selectedDepartment" @change="fetchEducationForms" :disabled="!selectedFaculty || loading"
-                class="col-span-2 px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none">
-                <option value="" disabled>
-                    {{ departments.length ? 'Выберите кафедру' : 'Нет доступных кафедр' }}
-                </option>
-                <option v-for="department in departments" :key="department.id" :value="department.id">
-                    {{ department.name }}
-                </option>
-            </select>
+            <div class="col-span-2">
+                <select v-model="selectedDepartment" @change="fetchEducationForms"
+                    :disabled="!selectedFaculty || loading"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    :class="{ 'border-red-500': errors.departments }">
+                    <option value="" disabled>
+                        {{ departments.length ? 'Выберите кафедру' : 'Нет доступных кафедр' }}
+                    </option>
+                    <option v-for="department in departments" :key="department.id" :value="department.id">
+                        {{ department.name }}
+                    </option>
+                </select>
+                <span v-if="errors.departments" class="text-red-500 text-sm">{{ errors.departments }}</span>
+            </div>
 
             <!-- Курс -->
-            <select v-model="course" :disabled="!selectedDepartment || loading"
-                class="px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none">
-                <option value="" disabled>{{ course.length ? 'Выберите курс' : 'Нет доступных курсов' }}</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
+            <div>
+                <select v-model="course" :disabled="!selectedDepartment || loading"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    :class="{ 'border-red-500': errors.course }">
+                    <option value="" disabled>{{ course.length ? 'Выберите курс' : 'Нет доступных курсов' }}</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <span v-if="errors.course" class="text-red-500 text-sm">{{ errors.course }}</span>
+            </div>
 
             <!-- Форма обучения -->
-            <select v-model="selectEducationForm" :disabled="!selectedDepartment || loading"
-                class="px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none">
-                <option value="" disabled>
-                    {{ educationForms.length ? 'Уровень образования' : 'Нет доступных форм обучения' }}
-                </option>
-                <option v-for="forms in educationForms" :key="forms.id" :value="forms.id">
-                    {{ forms.name }}
-                </option>
-            </select>
-            <LoadingStudentCard class="col-span-2">
+            <div>
+                <select v-model="selectEducationForm" :disabled="!selectedDepartment || loading"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    :class="{ 'border-red-500': errors.educationForms }">
+                    <option value="" disabled>
+                        {{ educationForms.length ? 'Уровень образования' : 'Нет доступных форм обучения' }}
+                    </option>
+                    <option v-for="forms in educationForms" :key="forms.id" :value="forms.id">
+                        {{ forms.name }}
+                    </option>
+                </select>
+                <span v-if="errors.educationForms" class="text-red-500 text-sm">{{ errors.educationForms }}</span>
+            </div>
 
-            </LoadingStudentCard>
+            <!-- Загрузка студенческого билета -->
+            <div class="col-span-2">
+                <LoadingStudentCard @file-selected="handleFileSelected" />
+                <span v-if="errors.studentCardFile" class="text-red-500 text-sm">{{ errors.studentCardFile }}</span>
+            </div>
         </div>
     </div>
 </template>
@@ -64,7 +87,6 @@
 <script setup>
 import { ref, onMounted, computed, watchEffect, watch } from 'vue';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { useRegistrationStore } from '@/stores/useRegistrationStore';
 import UserDataService from "@/services/UserDataService";
 import LoadingStudentCard from '../widgets/LoadingStudentCard.vue';
 
@@ -79,16 +101,45 @@ const selectedDepartment = ref('');
 const selectEducationForm = ref('');
 const loading = ref(false);
 const authStore = useAuthStore();
-const registrationStore = useRegistrationStore();
+const studentCardFile = ref(null)
 const emit = defineEmits(['update:isValid']);
+const errors = ref({
+    universities: '',
+    faculties: '',
+    departments: '',
+    educationForms: '',
+    course: '',
+    studentCardFile: '',
+});
+
+const validateForm = () => {
+    errors.value = {
+        universities: !selectedUniversity.value ? 'Выберите университет' : '',
+        faculties: !selectedFaculty.value ? 'Выберите факультет' : '',
+        departments: !selectedDepartment.value ? 'Выберите кафедру' : '',
+        educationForms: !selectEducationForm.value ? 'Выберите форму обучения' : '',
+        course: !course.value ? 'Выберите курс' : '',
+        studentCardFile: !studentCardFile.value ? 'Загрузите файл студенческого билета' : '',
+    };
+
+    return !Object.values(errors.value).some(error => error !== '');
+};
+
+defineExpose({ validateForm });
 
 const isFormValid = computed(() => {
     return selectedUniversity.value &&
         selectedFaculty.value &&
         selectedDepartment.value &&
         selectEducationForm.value &&
-        course.value;
+        course.value &&
+        studentCardFile.value
 });
+
+const handleFileSelected = (file) => {
+    studentCardFile.value = file;
+    authStore.setStudentCardPhoto(file);
+};
 
 watchEffect(() => {
     emit('update:isValid', isFormValid.value);

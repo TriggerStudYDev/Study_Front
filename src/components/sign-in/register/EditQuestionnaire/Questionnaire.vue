@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="grid grid-cols-3 gap-x-[30px]">
+        <div class="grid grid-cols-3 gap-x-[30px] mt-6">
             <QuestionnaireCard v-for="(card, index) in card" :key="card.id" :card="card"
                 :class="`animate-down delay-${index}`" @open-modal="openModal" />
         </div>
@@ -33,7 +33,7 @@ const card = [
         iconImage: '/image/questionnaire/star.svg',
         title: 'Навыки и достижеения',
         desctiption: 'Дисциплины, навыки, портфолио',
-        openModal: 'Skills',
+        openModal: 'Skill',
     },
 ];
 

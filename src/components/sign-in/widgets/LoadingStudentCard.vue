@@ -22,6 +22,7 @@ const authStore = useAuthStore();
 const fileInput = ref(null);
 const fileSelected = ref(false);
 const fileName = ref('');
+const emit = defineEmits(['file-selected'])
 
 const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -42,6 +43,7 @@ const handleFileChange = (event) => {
         authStore.setStudentCardPhoto(file);
         fileSelected.value = true;
         fileName.value = file.name;
+        emit('file-selected', file);
     }
 };
 </script>

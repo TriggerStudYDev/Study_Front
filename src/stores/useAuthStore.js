@@ -36,6 +36,8 @@ export const useAuthStore = defineStore("auth", {
         photo: null,
         about_self: "",
       },
+      rewiews: [],
+      portfolio: [],
     },
   }),
   actions: {
@@ -83,7 +85,7 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async postPhoto() {
+    async uploadFile(file, fileType) {
       if (!this.userId || !this.profileId) {
         throw new Error("User ID или Profile ID отсутствуют");
       }
@@ -91,13 +93,20 @@ export const useAuthStore = defineStore("auth", {
       const formData = new FormData();
       formData.append("user", this.userId);
       formData.append("profile", this.profileId);
-      formData.append("photo", this.data.student_card.photo);
-      formData.append("about_self", this.data.student_card.about_self);
+      formData.append("file", file);
+      formData.append("file_type", fileType); // Добавляем тип файла
 
       try {
-        await userDataService.postPhoto(formData);
+        const response = await userDataService.postPhoto(formData);
+        if (fileType === "reviews") {
+          this.data.reviews.push(response.data); // Сохраняем ответ сервера
+        } else if (fileType === "portfolio") {
+          this.data.portfolio.push(response.data); // Сохраняем ответ сервера
+        }
+
+        console.log("Файл успешно загружен:", response.data);
       } catch (error) {
-        console.error("Ошибка загрузки фото:", {
+        console.error("Ошибка загрузки файла:", {
           status: error.response?.status,
           data: error.response?.data,
           message: error.message,

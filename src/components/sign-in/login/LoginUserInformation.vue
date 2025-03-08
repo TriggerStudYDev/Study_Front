@@ -14,7 +14,7 @@
         <div class="flex flex-col">
             <button class="mt-2 w-full py-3 text-[#7B44F2] rounded-lg text-xl font-medium leading-7"
                 @click="$router.push({ name: 'register' })">Зарегестрироваться</button>
-            <button class="text-TeriaryDark font-medium mt-4">Забили пароль?</button>
+            <button class="text-TeriaryDark font-medium mt-4">Забыли пароль?</button>
         </div>
     </div>
 </template>

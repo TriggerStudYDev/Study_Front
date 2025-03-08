@@ -4,6 +4,9 @@
         <header>
             <QuestionnaireTable />
         </header>
+        <div class="mt-6">
+            <img src="/image/questionnaire/Stage.png" alt="">
+        </div>
         <main class="mt-6">
             <router-view @open-modal="openModal" />
         </main>

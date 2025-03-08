@@ -1,12 +1,49 @@
 // stores/useEditingStore.js
 import { defineStore } from "pinia";
 import AdminDataService from "@/services/AdminDataService";
+import EditingDataService from "@/services/EditingDataService";
+import { computed } from "vue";
 
 export const useEditingStore = defineStore("editing", {
   state: () => ({
-    profile: {}, // Исходные данные профиля
+    profile: {},
+    universities: {},
+    faculties: {},
+    departments: {},
+    edicationForms: {},
   }),
   actions: {
+    async getEducational() {
+      if (this.profile) {
+        try {
+          const response1 = await EditingDataService.getUniversities(
+            this.profile.profile.university
+          );
+          this.universities = response1.data.name || [];
+          const response2 = await EditingDataService.getFaculties(
+            this.profile.profile.faculty
+          );
+          this.faculties = response2.data.name || [];
+          const response3 = await EditingDataService.getDepartments(
+            this.profile.profile.department
+          );
+          this.departments = response3.data.name || [];
+          const response4 = await EditingDataService.getEducationForms(
+            this.profile.profile.form_of_study
+          );
+          this.edicationForms = response4.data.name || [];
+          console.log(
+            "Данные университетов:",
+            this.universities,
+            this.faculties,
+            this.departments
+          );
+        } catch (error) {
+          console.error("Ошибка загрузки университетов", error);
+        }
+      }
+    },
+
     async getEding() {
       try {
         const response = await AdminDataService.getProfile();
@@ -44,6 +81,11 @@ export const useEditingStore = defineStore("editing", {
           changes.telegram_username = updatedData.telegram_username;
         }
 
+        // Сравниваем поле about_self
+        if (updatedData.about_self !== this.profile.about_self) {
+          changes.about_self = updatedData.about_self;
+        }
+
         if (Object.keys(changes).length > 0) {
           const response = await AdminDataService.putUpdateProfile(changes);
           this.profile = {
@@ -53,6 +95,7 @@ export const useEditingStore = defineStore("editing", {
               first_name: changes.first_name || this.profile.user.first_name,
               last_name: changes.last_name || this.profile.user.last_name,
               email: changes.email || this.profile.user.email,
+              about_self: changes.about_self || this.profile.about_self,
             },
             profile: {
               ...this.profile.profile,

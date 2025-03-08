@@ -1,29 +1,26 @@
-<!-- @/components/sign-in/register/RegisterForm.vue -->
 <template>
     <div class="inset-0 z-50 backface-hidden">
         <div class="max-w-[510px] mx-auto bg-white rounded-3xl p-6 slide-up">
             <div class="flex flex-col justify-center">
                 <div class="mt-6">
                     <h2 class="text-[40px] leading-[52px] font-semibold text-[#171717]">{{ pageContent[countPages].title
-                    }}
-                    </h2>
+                    }}</h2>
                     <p class="text-[#171717] text-xl mt-2">{{ pageContent[countPages].description }}</p>
                 </div>
                 <div class="flex flex-col mt-8 w-full">
                     <CountPageRegister class="mx-auto" :countPages="countPages" />
                     <component :typeAuth="typeAuth" @toggle-auth="$emit('toggle-auth')" class="mt-8"
-                        :is="currentComponent" @next-step="nextPage" @prev-step="prevStep"
+                        :is="currentComponent" ref="currentForm" @next-step="nextPage" @prev-step="prevStep"
                         @update:isValid="isValid = $event" @file-selected="handleFileSelected"
                         @open-modal="$emit('open-modal')" />
                 </div>
                 <div class="flex flex-col gap-x-4 mt-8">
                     <button class="px-8 py-3 bg-AccentViolet text-white rounded-lg text-xl font-medium leading-7"
-                        @click="handleClick" :disabled="!isValid">
+                        @click="handleClick">
                         {{ countPages === 3 ? 'Готово' : 'Продолжить' }}
                     </button>
                     <button class="px-8 py-3 bg-white text-AccentViolet rounded-lg text-xl font-medium leading-7 mt-2"
-                        @click="handleClickLogin">{{ countPages === 1 ? 'Войти в аккаунт' : 'Назад'
-                        }}</button>
+                        @click="handleClickLogin">{{ countPages === 1 ? 'Войти в аккаунт' : 'Назад' }}</button>
                 </div>
             </div>
         </div>
@@ -43,6 +40,7 @@ const router = useRouter();
 const countPages = ref(1);
 const isValid = ref(false);
 const authStore = useAuthStore();
+const currentForm = ref(null);
 
 const pageContent = {
     1: {
@@ -57,13 +55,13 @@ const pageContent = {
         title: "Продемонстрируй свои навыки!",
         description: "Добавь портфолио или отзывы клиентов. Это твой шанс выделиться и привлечь больше заказов."
     }
-}
+};
 
 const props = defineProps({
     typeAuth: {
         type: Boolean,
     }
-})
+});
 
 const emit = defineEmits(['toggle-auth', 'registration-success']);
 emit('registration-success');
@@ -79,9 +77,17 @@ const currentComponent = computed(() => {
         default:
             return null;
     }
-})
+});
 
 const handleClick = async () => {
+    // if (currentForm.value) {
+    //     const isFormValid = await currentForm.value.validateForm();
+    //     if (!isFormValid) {
+    //         console.log('Форма содержит ошибки');
+    //         return;
+    //     }
+    // }
+
     if (countPages.value === 3) {
         try {
             await authStore.register();
@@ -100,7 +106,7 @@ const handleClickLogin = () => {
     } else {
         prevStep();
     }
-}
+};
 
 const handleFileSelected = (file) => {
     authStore.setStudentCardPhoto(file);
@@ -119,6 +125,6 @@ const prevStep = () => {
 };
 
 onMounted(() => {
-    authStore.referralCode()
-}) 
+    authStore.referralCode();
+});
 </script>
