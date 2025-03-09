@@ -29,17 +29,22 @@
                         <input v-model="form.email" type="text" placeholder="Email*" class="w-full outline-none" />
                         <button @click="form.email = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
                     </div>
-                    <div class="flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input v-model="form.vk_profile" type="text" placeholder="Профиль VK"
-                            class="w-full outline-none" />
-                        <button @click="form.vk_profile = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
-                    </div>
-                    <div class="flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input v-model="form.telegram_username" type="text" placeholder="Telegram"
-                            class="w-full outline-none" />
-                        <button @click="form.telegram_username = ''"><img src="/image/modal/closeInput.svg"
-                                alt=""></button>
-                    </div>
+                    <socialMedia @click="openModal('telegram')">
+                        <template #image>
+                            <img src="/image/auth/telegram.svg" alt="socialMedia">
+                        </template>
+                        <template #title>
+                            <h4 class="text-[#29A9EB] text-xl font-medium">Telegram</h4>
+                        </template>
+                    </socialMedia>
+                    <socialMedia @click="openModal('vk')">
+                        <template #image>
+                            <img src="/image/auth/vk.svg" alt="socialMedia">
+                        </template>
+                        <template #title>
+                            <h4 class="text-[#0077FF] text-xl font-medium">ВКонтакте</h4>
+                        </template>
+                    </socialMedia>
                 </div>
                 <button @click="saveChanges"
                     class="px-8 py-3 bg-AccentViolet text-white rounded-lg text-xl font-medium leading-7 mt-8">
@@ -53,15 +58,17 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useEditingStore } from '@/stores/useEditingStore';
+import SocialMedia from '@/components/sign-in/widgets/SocialMedia.vue';
+import { useModalStore } from '@/stores/useModalStore';
 
 const editingStore = useEditingStore();
+const modalStore = useModalStore();
+const { openModal } = modalStore;
 const animation = ref(false)
 const form = ref({
     first_name: '',
     last_name: '',
     email: '',
-    vk_profile: '',
-    telegram_username: '',
 });
 
 const closeButton = () => {
@@ -78,8 +85,6 @@ watch(() => editingStore.profile, (newProfile) => {
             first_name: newProfile.user.first_name || '',
             last_name: newProfile.user.last_name || '',
             email: newProfile.user.email || '',
-            vk_profile: newProfile.profile.vk_profile || '',
-            telegram_username: newProfile.profile.telegram_username || '',
         };
     }
 }, { immediate: true });

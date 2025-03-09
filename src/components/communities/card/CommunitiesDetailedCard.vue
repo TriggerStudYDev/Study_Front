@@ -20,8 +20,8 @@
 
 <script setup>
 import StatisticsCommunitiesCard from '@/ui/StatisticsCommunitiesCard.vue';
-import CommunitiesPriceCard from '@/widgets/communities/card/CommunitiesPriceCard.vue';
-import CommunitiesMemberCard from '@/widgets/communities/card/CommunitiesMemberCard.vue';
+import CommunitiesPriceCard from '@/components/communities/card/CommunitiesPriceCard.vue';
+import CommunitiesMemberCard from '@/components/communities/card/CommunitiesMemberCard.vue';
 
 defineProps({
     card: {

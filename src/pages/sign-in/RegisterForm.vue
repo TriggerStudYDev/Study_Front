@@ -4,7 +4,7 @@
             <div class="flex flex-col justify-center">
                 <div class="mt-6">
                     <h2 class="text-[40px] leading-[52px] font-semibold text-[#171717]">{{ pageContent[countPages].title
-                    }}</h2>
+                        }}</h2>
                     <p class="text-[#171717] text-xl mt-2">{{ pageContent[countPages].description }}</p>
                 </div>
                 <div class="flex flex-col mt-8 w-full">
@@ -80,13 +80,13 @@ const currentComponent = computed(() => {
 });
 
 const handleClick = async () => {
-    // if (currentForm.value) {
-    //     const isFormValid = await currentForm.value.validateForm();
-    //     if (!isFormValid) {
-    //         console.log('Форма содержит ошибки');
-    //         return;
-    //     }
-    // }
+    if (currentForm.value) {
+        const isFormValid = await currentForm.value.validateForm();
+        if (!isFormValid) {
+            console.log('Форма содержит ошибки');
+            return;
+        }
+    }
 
     if (countPages.value === 3) {
         try {

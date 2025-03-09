@@ -119,19 +119,19 @@ const props = defineProps({
     }
 })
 
-const isFormValid = computed(() => {
-    if (!auth.value) return false;
+// const isFormValid = computed(() => {
+//     if (!auth.value) return false;
 
-    return auth.value.username.trim() !== '' &&
-        auth.value.last_name.trim() !== '' &&
-        auth.value.first_name.trim() !== '' &&
-        auth.value.email.trim() !== '' &&
-        auth.value.password.trim() !== '' &&
-        auth.value.password === passwordRepeat.value &&
-        isAgreementChecked.value &&
-        authStore.data.profile.vk_profile !== '' &&
-        authStore.data.profile.telegram_username !== '';
-});
+//     return auth.value.username.trim() !== '' &&
+//         auth.value.last_name.trim() !== '' &&
+//         auth.value.first_name.trim() !== '' &&
+//         auth.value.email.trim() !== '' &&
+//         auth.value.password.trim() !== '' &&
+//         auth.value.password === passwordRepeat.value &&
+//         isAgreementChecked.value &&
+//         authStore.data.profile.vk_profile !== '' &&
+//         authStore.data.profile.telegram_username !== '';
+// });
 
 watchEffect(() => {
     if (isDataLoaded.value) emit('update:isValid', isFormValid.value);

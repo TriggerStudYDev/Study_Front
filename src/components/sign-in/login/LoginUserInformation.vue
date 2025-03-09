@@ -1,6 +1,6 @@
 <!-- src/widgets/LoginUserInformation.vue -->
 <template>
-    <div class="flex flex-col bg-white rounded-2xl pt-8 px-6 pb-6 w-[542px] slide-up">
+    <div class="flex flex-col bg-white rounded-2xl pt-8 px-6 pb-6 w-[510px] slide-up">
         <h2 class="text-[36px] font-semibold">С возвращением!</h2>
         <span class="text-PrimatyDark text-xl mt-2">Рады снова тебя видеть!</span>
         <div class="flex flex-col gap-y-4 mt-8">
