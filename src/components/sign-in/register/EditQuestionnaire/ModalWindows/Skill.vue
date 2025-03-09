@@ -15,12 +15,13 @@
                 <div class="grid grid-cols-2 gap-4 mt-8">
                     <div
                         class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input type="text" placeholder="Дисциплина">
-                        <button><img src="/image/modal/closeInput.svg" alt=""></button>
+                        <input class="outline-none w-full" type="text" placeholder="Дисциплина"
+                            v-model="form.disciplines">
+                        <button @click="form.disciplines = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
                     </div>
                     <div
                         class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input class=" outline-none w-full" type="text" placeholder="О себе" v-model="form.about_self">
+                        <input class="outline-none w-full" type="text" placeholder="О себе" v-model="form.about_self">
                     </div>
                     <div class="col-span-2">
                         <div
@@ -69,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useEditingStore } from '@/stores/useEditingStore';
 
 const editingStore = useEditingStore();
@@ -82,10 +83,11 @@ const form = ref({
     portfolio: '',
 })
 
-watch(() => editingStore.profile, (newProfile) => {
+watch(() => [editingStore.profile, editingStore.disciplines], (newProfile) => {
     if (newProfile) {
         form.value = {
             about_self: editingStore.profile.about_self || '',
+            disciplines: editingStore.disciplines || '',
         }
     }
 }, { immediate: true })
@@ -105,4 +107,12 @@ const saveChanges = async () => {
         console.error('Ошибка при сохранении изменений:', error);
     }
 }
+
+onMounted(async () => {
+    await editingStore.getEducational();
+    form.value = {
+        about_self: editingStore.profile.about_self || '',
+        disciplines: editingStore.disciplines || '',
+    }
+})
 </script>

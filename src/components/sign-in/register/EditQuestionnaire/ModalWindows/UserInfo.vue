@@ -1,3 +1,4 @@
+<!--  -->
 <template>
     <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
         :class="{ 'fade-out': animation }">
@@ -91,7 +92,13 @@ watch(() => editingStore.profile, (newProfile) => {
 
 const saveChanges = async () => {
     try {
-        await editingStore.updateProfile(form.value);
+        const updatedData = {
+            ...form.value,
+            vk_profile: editingStore.profile.profile.vk_profile,
+            telegram_username: editingStore.profile.profile.telegram_username,
+        };
+
+        await editingStore.updateProfile(updatedData);
         closeButton();
     } catch (error) {
         console.error('Ошибка при сохранении изменений:', error);

@@ -9,6 +9,7 @@ export default {
         AccentViolet: "#7B44F2",
         TeriaryDark: "#BFBFBF",
         AccentGreen: "#CAF272",
+        DisabledDark: "#F2F2F2",
       },
     },
   },

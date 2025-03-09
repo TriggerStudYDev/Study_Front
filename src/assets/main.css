@@ -44,3 +44,19 @@ body {
 .slide-down {
     animation: slide-down 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
+
+@keyframes left-to-right {
+    from {
+        transform: translateX(-50%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.left-to-right {
+    animation: left-to-right 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}

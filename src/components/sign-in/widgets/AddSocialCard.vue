@@ -25,6 +25,8 @@
 <script setup>
 import { useModalStore } from '@/stores/useModalStore';
 import { useAuthStore } from '@/stores/useAuthStore';
+import iconTg from '/image/auth/telegram.svg';
+import iconVk from '/image/auth/vk.svg';
 import { computed } from 'vue';
 
 const modalStore = useModalStore();
@@ -44,14 +46,14 @@ const props = defineProps({
 const socialData = computed(() => {
     return {
         telegram: {
-            icon: '/image/auth/telegram.svg',
+            icon: iconTg,
             title: 'Telegram',
             subtitle: 'Добавить контакт',
             placeholder: '@username',
             storeField: 'telegram_username',
         },
         vk: {
-            icon: '/image/auth/vk.svg',
+            icon: iconVk,
             title: 'ВКонтакте',
             subtitle: 'Добавить контакт',
             placeholder: 'vk.com/username',

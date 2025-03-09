@@ -4,7 +4,7 @@
         <div class="grid grid-cols-2 gap-4">
             <input class="px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
                 :class="{ 'border-red-500': errors.username }" type="text" placeholder="Логин*" v-model="auth.username">
-            <input class=" px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+            <input class="px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
                 :class="{ 'border-red-500': errors.last_name }" type="text" placeholder="Имя*" v-model="auth.last_name">
             <input
                 class="col-span-2 px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
@@ -17,14 +17,20 @@
                     @input="errors.email = false">
                 <span v-if="errors.email" class="text-red-500 text-sm mt-1">Введите корректный email</span>
             </div>
-            <input
-                class="col-span-2 px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
-                :class="{ 'border-red-500': errors.password }" type="password" placeholder="Пароль*"
-                v-model="auth.password">
-            <input
-                class="col-span-2 px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
-                :class="{ 'border-red-500': errors.password_repeat }" type="password" placeholder="Повторите пароль*"
-                v-model="passwordRepeat">
+            <div class="col-span-2">
+                <input
+                    class="w-full px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    :class="{ 'border-red-500': errors.password }" type="password" placeholder="Пароль*"
+                    v-model="auth.password">
+                <span v-if="errors.password" class="text-red-500 text-sm mt-1">Введите пароль</span>
+            </div>
+            <div class="col-span-2">
+                <input
+                    class="w-full px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    :class="{ 'border-red-500': errors.password_repeat }" type="password"
+                    placeholder="Повторите пароль*" v-model="passwordRepeat">
+                <span v-if="errors.password_repeat" class="text-red-500 text-sm mt-1">Пароли не совпадают</span>
+            </div>
         </div>
         <div class="mt-4">
             <h3 class="text-PrimaryDark text-2xl font-medium">Укажи удобный способ связи</h3>
@@ -97,15 +103,16 @@ const validateEmail = (email) => {
 };
 
 const validateForm = () => {
-    errors.value.username = !auth.value.username.trim();
-    errors.value.first_name = !auth.value.first_name.trim();
-    errors.value.last_name = !auth.value.last_name.trim();
-    errors.value.email = !auth.value.email.trim() || !validateEmail(auth.value.email);
-    errors.value.password = !auth.value.password.trim();
-    errors.value.password_repeat = !passwordRepeat.value.trim() || auth.value.password !== passwordRepeat.value;
-    errors.value.telegram = !authStore.data.profile.telegram_username;
-    errors.value.vk = !authStore.data.profile.vk_profile;
-    errors.value.boxChecking = !isAgreementChecked.value;
+    errors.value = {
+        username: !auth.value.username.trim() ? 'Введите имя пользователя' : '',
+        last_name: !auth.value.last_name.trim() ? 'Введите фамилию' : '',
+        first_name: !auth.value.first_name.trim() ? 'Введите имя' : '',
+        email: !validateEmail(auth.value.email) ? 'Введите корректный email' : '',
+        password: !auth.value.password.trim() ? 'Введите пароль' : '',
+        password_repeat: auth.value.password !== passwordRepeat.value ? 'Пароли не совпадают' : '',
+        vk_profile: !authStore.data.profile.vk_profile ? 'Введите ссылку на ваш профиль в VK' : '',
+        telegram_username: !authStore.data.profile.telegram_username ? 'Введите ваш ник в Telegram' : '',
+    }
 
     return !Object.values(errors.value).some(error => error);
 };
@@ -119,19 +126,19 @@ const props = defineProps({
     }
 })
 
-// const isFormValid = computed(() => {
-//     if (!auth.value) return false;
+const isFormValid = computed(() => {
+    if (!auth.value) return false;
 
-//     return auth.value.username.trim() !== '' &&
-//         auth.value.last_name.trim() !== '' &&
-//         auth.value.first_name.trim() !== '' &&
-//         auth.value.email.trim() !== '' &&
-//         auth.value.password.trim() !== '' &&
-//         auth.value.password === passwordRepeat.value &&
-//         isAgreementChecked.value &&
-//         authStore.data.profile.vk_profile !== '' &&
-//         authStore.data.profile.telegram_username !== '';
-// });
+    return auth.value.username.trim() !== '' &&
+        auth.value.last_name.trim() !== '' &&
+        auth.value.first_name.trim() !== '' &&
+        auth.value.email.trim() !== '' &&
+        auth.value.password.trim() !== '' &&
+        auth.value.password === passwordRepeat.value &&
+        isAgreementChecked.value &&
+        authStore.data.profile.vk_profile !== '' &&
+        authStore.data.profile.telegram_username !== '';
+});
 
 watchEffect(() => {
     if (isDataLoaded.value) emit('update:isValid', isFormValid.value);

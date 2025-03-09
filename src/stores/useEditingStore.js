@@ -11,6 +11,7 @@ export const useEditingStore = defineStore("editing", {
     faculties: {},
     departments: {},
     edicationForms: {},
+    disciplines: {},
   }),
   actions: {
     async getEducational() {
@@ -32,6 +33,10 @@ export const useEditingStore = defineStore("editing", {
             this.profile.profile.form_of_study
           );
           this.edicationForms = response4.data.name || [];
+          const response5 = await EditingDataService.getDisciplines(
+            this.profile.profile.disciplines
+          );
+          this.disciplines = response5.data.name || [];
           console.log(
             "Данные университетов:",
             this.universities,

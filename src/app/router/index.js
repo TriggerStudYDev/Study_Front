@@ -60,7 +60,7 @@ const settingProfile = [
             path: "feedback",
             component: () =>
               import(
-                "@/components/sign-in/register/EditQuestionnaire/Feedback.vue"
+                "@/components/sign-in/register/EditQuestionnaire/FeedBack/Feedback.vue"
               ),
           },
           {
@@ -76,7 +76,7 @@ const settingProfile = [
             path: "history",
             component: () =>
               import(
-                "@/components/sign-in/register/EditQuestionnaire/History.vue"
+                "@/components/sign-in/register/EditQuestionnaire/History/History.vue"
               ),
           },
         ],

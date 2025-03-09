@@ -1,3 +1,4 @@
+<!-- src/components/sign-in/register/EditQuestionnaire/ModalWindows/SocialCard.vue -->
 <template>
     <div class="fixed inset-0">
         <div class="bg-white px-6 pt-5 pb-12 rounded-2xl max-w-[510px] mx-auto mt-[20vh] w-full slide-up">
@@ -71,6 +72,14 @@ const socialData = computed(() => {
 });
 
 const saveSocial = () => {
+    // const field = socialData.value.storeField; // Поле (telegram_username или vk_profile)
+    // const value = editingStore.profile.profile[field]; // Значение из input
+
+    // // Обновляем состояние в хранилище
+    // editingStore.updateProfile({
+    //     [field]: value,
+    // });
+
     closeModal();
 };
 </script>

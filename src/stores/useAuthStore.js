@@ -36,7 +36,7 @@ export const useAuthStore = defineStore("auth", {
         photo: null,
         about_self: "",
       },
-      rewiews: [],
+      reviews: [],
       portfolio: [],
     },
   }),
@@ -85,7 +85,7 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async uploadFile(file, fileType) {
+    async postPhoto() {
       if (!this.userId || !this.profileId) {
         throw new Error("User ID или Profile ID отсутствуют");
       }
@@ -93,20 +93,13 @@ export const useAuthStore = defineStore("auth", {
       const formData = new FormData();
       formData.append("user", this.userId);
       formData.append("profile", this.profileId);
-      formData.append("file", file);
-      formData.append("file_type", fileType); // Добавляем тип файла
+      formData.append("photo", this.data.student_card.photo);
+      formData.append("about_self", this.data.student_card.about_self);
 
       try {
-        const response = await userDataService.postPhoto(formData);
-        if (fileType === "reviews") {
-          this.data.reviews.push(response.data); // Сохраняем ответ сервера
-        } else if (fileType === "portfolio") {
-          this.data.portfolio.push(response.data); // Сохраняем ответ сервера
-        }
-
-        console.log("Файл успешно загружен:", response.data);
+        await userDataService.postPhoto(formData);
       } catch (error) {
-        console.error("Ошибка загрузки файла:", {
+        console.error("Ошибка загрузки фото:", {
           status: error.response?.status,
           data: error.response?.data,
           message: error.message,
@@ -115,6 +108,34 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
+    async uploadUpdate() {
+      try {
+        // Для отзывов
+        const reviewsFormData = new FormData();
+        reviewsFormData.append("user", this.userId);
+        reviewsFormData.append("profile", this.profileId);
+        this.data.reviews.forEach((file, index) => {
+          reviewsFormData.append(`reviews`, file); // Ключ должен соответствовать ожиданиям сервера
+        });
+
+        // Для портфолио
+        const portfolioFormData = new FormData();
+        portfolioFormData.append("user", this.userId);
+        portfolioFormData.append("profile", this.profileId);
+        this.data.portfolio.forEach((file, index) => {
+          portfolioFormData.append(`portfolio`, file); // Ключ должен соответствовать ожиданиям сервера
+        });
+
+        // Отправляем отдельные запросы для отзывов и портфолио
+        await userDataService.uploadFile(reviewsFormData);
+        await userDataService.uploadFile(portfolioFormData);
+
+        console.log("Все файлы успешно отправлены");
+      } catch (error) {
+        console.error("Ошибка загрузки файлов:", error);
+        throw error;
+      }
+    },
     async login() {
       const data = {
         username: this.data.user.username,
