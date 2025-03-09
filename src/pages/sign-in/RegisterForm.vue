@@ -37,7 +37,7 @@ import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const countPages = ref(3);
+const countPages = ref(1);
 const isValid = ref(false);
 const authStore = useAuthStore();
 const currentForm = ref(null);
@@ -94,7 +94,6 @@ const handleClick = async () => {
             await authStore.register();
             await authStore.postPhoto();
             // await authStore.uploadUpdate(); // Отправляем файлы после регистрации
-            router.push({ name: 'success-page' });
         } catch (error) {
             console.error("Ошибка:", error);
         }
