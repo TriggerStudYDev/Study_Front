@@ -1,122 +1,102 @@
-// stores/useEditingStore.js
 import { defineStore } from "pinia";
 import AdminDataService from "@/services/AdminDataService";
 import EditingDataService from "@/services/EditingDataService";
-import { computed } from "vue";
 
 export const useEditingStore = defineStore("editing", {
   state: () => ({
-    profile: {},
-    universities: {},
-    faculties: {},
-    departments: {},
-    edicationForms: {},
-    disciplines: {},
+    profile: {
+      first_name: "",
+      last_name: "",
+      vk_profile: "",
+      telegram_username: "",
+      course: null,
+      form_of_study: null,
+      photo: null,
+      about_self: "",
+      customer_feedback: [],
+      portfolio: [],
+    },
+    university: null,
+    faculty: null, // Было faculties
+    department: null,
+    educationForms: null,
+    discipline: null,
+    email: "",
+    user: {},
+    changes: {}, // Объект для накопления изменений
   }),
   actions: {
-    async getEducational() {
-      if (this.profile) {
-        try {
-          const response1 = await EditingDataService.getUniversities(
-            this.profile.profile.university
-          );
-          this.universities = response1.data.name || [];
-          const response2 = await EditingDataService.getFaculties(
-            this.profile.profile.faculty
-          );
-          this.faculties = response2.data.name || [];
-          const response3 = await EditingDataService.getDepartments(
-            this.profile.profile.department
-          );
-          this.departments = response3.data.name || [];
-          const response4 = await EditingDataService.getEducationForms(
-            this.profile.profile.form_of_study
-          );
-          this.edicationForms = response4.data.name || [];
-          const response5 = await EditingDataService.getDisciplines(
-            this.profile.profile.disciplines
-          );
-          this.disciplines = response5.data.name || [];
-          console.log(
-            "Данные университетов:",
-            this.universities,
-            this.faculties,
-            this.departments
-          );
-        } catch (error) {
-          console.error("Ошибка загрузки университетов", error);
-        }
-      }
-    },
-
-    async getEding() {
+    async getProfile() {
       try {
         const response = await AdminDataService.getProfile();
-        this.profile = response.data.results[0];
-        console.log("Данные профиля:", this.profile);
+        this.user = response.data.results[0] || {};
+        this.profile.first_name = this.user.user.first_name;
+        this.profile.last_name = this.user.user.last_name;
+        this.email = this.user.user.email;
+        this.profile.vk_profile = this.user.profile.vk_profile;
+        this.profile.telegram_username = this.user.profile.telegram_username;
+        this.profile.form_of_study = this.user.profile.form_of_study;
+        this.profile.photo = this.user.photo;
+        this.profile.about_self = this.user.about_self;
+        this.profile.customer_feedback = this.user.customer_feedback;
+        this.profile.portfolio = this.user.portfolio;
+        console.log("Получен профиль:", this.user);
       } catch (error) {
         console.error("Ошибка загрузки профиля", error);
       }
     },
 
-    async updateProfile(updatedData) {
+    async getEducational() {
       try {
-        // Сравниваем исходные данные с измененными
-        const changes = {};
-
-        // Сравниваем поля из user
-        if (updatedData.first_name !== this.profile.user.first_name) {
-          changes.first_name = updatedData.first_name;
-        }
-        if (updatedData.last_name !== this.profile.user.last_name) {
-          changes.last_name = updatedData.last_name;
-        }
-        if (updatedData.email !== this.profile.user.email) {
-          changes.email = updatedData.email;
+        // Добавляем проверки
+        if (this.user.profile?.university) {
+          const universityResponse = await EditingDataService.getUniversities(
+            this.user.profile.university
+          );
+          this.university = universityResponse.data;
         }
 
-        // Сравниваем поля из profile
-        if (updatedData.vk_profile !== this.profile.profile.vk_profile) {
-          changes.vk_profile = updatedData.vk_profile;
-        }
-        if (
-          updatedData.telegram_username !==
-          this.profile.profile.telegram_username
-        ) {
-          changes.telegram_username = updatedData.telegram_username;
+        if (this.user.profile?.faculty) {
+          const facultyResponse = await EditingDataService.getFaculties(
+            this.user.profile.faculty
+          );
+          this.faculty = facultyResponse.data; // Исправлено с faculties на faculty
         }
 
-        // Сравниваем поле about_self
-        if (updatedData.about_self !== this.profile.about_self) {
-          changes.about_self = updatedData.about_self;
+        if (this.user.profile?.department) {
+          const departmentResponse = await EditingDataService.getDepartments(
+            this.user.profile.department
+          );
+          this.department = departmentResponse.data;
         }
 
-        if (Object.keys(changes).length > 0) {
-          const response = await AdminDataService.putUpdateProfile(changes);
-          this.profile = {
-            ...this.profile,
-            user: {
-              ...this.profile.user,
-              first_name: changes.first_name || this.profile.user.first_name,
-              last_name: changes.last_name || this.profile.user.last_name,
-              email: changes.email || this.profile.user.email,
-              about_self: changes.about_self || this.profile.about_self,
-            },
-            profile: {
-              ...this.profile.profile,
-              vk_profile: changes.vk_profile || this.profile.profile.vk_profile,
-              telegram_username:
-                changes.telegram_username ||
-                this.profile.profile.telegram_username,
-            },
-          };
-          console.log("Изменения сохранены:", response.data);
+        if (this.user.profile?.form_of_study) {
+          const formOfStudyResponse = await EditingDataService.getFormOfStudies(
+            this.user.profile.form_of_study
+          );
+          this.formOfStudy = formOfStudyResponse.data;
+        }
+      } catch (error) {
+        console.error("Ошибка при загрузке учебных данных:", error);
+      }
+    },
+    // Метод для накопления изменений
+    setChanges(newChanges) {
+      this.changes = { ...this.changes, ...newChanges };
+    },
+
+    // Метод для отправки всех изменений
+    async saveChanges() {
+      try {
+        if (Object.keys(this.changes).length > 0) {
+          await EditingDataService.putUpdateProfile(this.changes);
+          console.log("Изменения успешно сохранены:", this.changes);
+          this.changes = {}; // Очищаем изменения после успешного сохранения
         } else {
           console.log("Нет изменений для сохранения");
         }
       } catch (error) {
-        console.error("Ошибка при обновлении профиля:", error);
-        throw error;
+        console.error("Ошибка при сохранении изменений:", error);
       }
     },
   },

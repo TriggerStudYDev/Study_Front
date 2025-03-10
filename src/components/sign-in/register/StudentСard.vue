@@ -12,7 +12,7 @@
                         {{ university.name }}
                     </option>
                 </select>
-                <span v-if="errors.universities" class="text-red-500 text-sm">{{ errors.universities }}</span>
+                <span v-if="errors.universities" class="text-sm text-red-500">{{ errors.universities }}</span>
             </div>
 
             <!-- Факультеты -->
@@ -27,7 +27,7 @@
                         {{ faculty.name }}
                     </option>
                 </select>
-                <span v-if="errors.faculties" class="text-red-500 text-sm">{{ errors.faculties }}</span>
+                <span v-if="errors.faculties" class="text-sm text-red-500">{{ errors.faculties }}</span>
             </div>
 
             <!-- Кафедры -->
@@ -43,7 +43,7 @@
                         {{ department.name }}
                     </option>
                 </select>
-                <span v-if="errors.departments" class="text-red-500 text-sm">{{ errors.departments }}</span>
+                <span v-if="errors.departments" class="text-sm text-red-500">{{ errors.departments }}</span>
             </div>
 
             <!-- Курс -->
@@ -57,7 +57,7 @@
                     <option value="3">3</option>
                     <option value="4">4</option>
                 </select>
-                <span v-if="errors.course" class="text-red-500 text-sm">{{ errors.course }}</span>
+                <span v-if="errors.course" class="text-sm text-red-500">{{ errors.course }}</span>
             </div>
 
             <!-- Форма обучения -->
@@ -72,13 +72,13 @@
                         {{ forms.name }}
                     </option>
                 </select>
-                <span v-if="errors.educationForms" class="text-red-500 text-sm">{{ errors.educationForms }}</span>
+                <span v-if="errors.educationForms" class="text-sm text-red-500">{{ errors.educationForms }}</span>
             </div>
 
             <!-- Загрузка студенческого билета -->
             <div class="col-span-2">
                 <LoadingStudentCard @file-selected="handleFileSelected" />
-                <span v-if="errors.studentCardFile" class="text-red-500 text-sm">{{ errors.studentCardFile }}</span>
+                <span v-if="errors.studentCardFile" class="text-sm text-red-500">{{ errors.studentCardFile }}</span>
             </div>
         </div>
     </div>
@@ -214,13 +214,6 @@ watch([selectedUniversity, selectedFaculty, selectEducationForm, selectedDepartm
     authStore.data.profile.department = selectedDepartment.value;
     authStore.data.profile.form_of_study = selectEducationForm.value;
     authStore.data.profile.course = course.value;
-    // registrationStore.setSelectedUniversity();
-    // registrationStore.setSelectedFaculuty();
-    // registrationStore.setSelectedDepartment();
-    // registrationStore.setSelectedEducationForm();
-    // registrationStore.setSelectedCourse();
-    // registrationStore.setVkProfile();
-    // registrationStore.setTelegramUsername();
 });
 
 

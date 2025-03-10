@@ -34,8 +34,4 @@ export default {
       status: status,
     });
   },
-
-  putUpdateProfile(data) {
-    return http.put("api/auth/student-card/update/", data);
-  },
 };

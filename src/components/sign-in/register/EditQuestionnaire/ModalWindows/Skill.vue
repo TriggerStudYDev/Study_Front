@@ -6,7 +6,7 @@
                 <img src="/image/auth/Close_MD.svg" alt="Close">
             </button>
             <div class="flex flex-col">
-                <h1 class="text-2xl font-semibold mt-2 text-PrimaryDark">Личная информация</h1>
+                <h1 class="mt-2 text-2xl font-semibold text-PrimaryDark">Личная информация</h1>
                 <p class="text-PrimaryDark">
                     Здесь хранятся твои основные данные: ФИО, почта и другие контактные данные. Убедись, что всё
                     актуально, чтобы
@@ -15,13 +15,13 @@
                 <div class="grid grid-cols-2 gap-4 mt-8">
                     <div
                         class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input class="outline-none w-full" type="text" placeholder="Дисциплина"
+                        <input class="w-full outline-none" type="text" placeholder="Дисциплина"
                             v-model="form.disciplines">
                         <button @click="form.disciplines = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
                     </div>
                     <div
                         class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input class="outline-none w-full" type="text" placeholder="О себе" v-model="form.about_self">
+                        <input class="w-full outline-none" type="text" placeholder="О себе" v-model="form.about_self">
                     </div>
                     <div class="col-span-2">
                         <div
@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <button @click="saveChanges"
-                    class="px-8 py-3 bg-AccentViolet text-white rounded-lg text-xl font-medium leading-7 mt-8">
+                    class="px-8 py-3 mt-8 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet">
                     Сохранить
                 </button>
             </div>
@@ -70,34 +70,30 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useEditingStore } from '@/stores/useEditingStore';
 
 const editingStore = useEditingStore();
-const animation = ref(false)
+const animation = ref(false);
 const emit = defineEmits(['close']);
 const form = ref({
     disciplines: '',
     about_self: '',
     reviews: '',
     portfolio: '',
-})
+});
 
-watch(() => [editingStore.profile, editingStore.disciplines], (newProfile) => {
+
+watch(() => editingStore.profile, (newProfile) => {
     if (newProfile) {
         form.value = {
-            about_self: editingStore.profile.about_self || '',
-            disciplines: editingStore.disciplines || '',
-        }
+            disciplines: newProfile.profile.disciplines || '',
+            about_self: newProfile.about_self || '',
+            reviews: newProfile.reviews || '',
+            portfolio: newProfile.portfolio || '',
+        };
     }
-}, { immediate: true })
-
-const closeButton = () => {
-    animation.value = true;
-    setTimeout(() => {
-        emit('close');
-    }, 300)
-}
+}, { immediate: true });
 
 const saveChanges = async () => {
     try {
@@ -106,13 +102,12 @@ const saveChanges = async () => {
     } catch (error) {
         console.error('Ошибка при сохранении изменений:', error);
     }
-}
+};
 
-onMounted(async () => {
-    await editingStore.getEducational();
-    form.value = {
-        about_self: editingStore.profile.about_self || '',
-        disciplines: editingStore.disciplines || '',
-    }
-})
+const closeButton = () => {
+    animation.value = true;
+    setTimeout(() => {
+        emit('close');
+    }, 300);
+};
 </script>
