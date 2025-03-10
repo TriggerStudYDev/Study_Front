@@ -1,9 +1,12 @@
 <template>
-    <div>
+    <div class="flex flex-col items-center">
         <div class="grid grid-cols-3 gap-x-[30px] mt-6">
             <QuestionnaireCard v-for="(card, index) in card" :key="card.id" :card="card"
                 :class="`animate-down delay-${index}`" @open-modal="openModal" />
         </div>
+        <button
+            class="col-span-3 px-8 py-3 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet mt-[30%]">Отправить
+            на проверку</button>
     </div>
 </template>
 
