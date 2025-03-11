@@ -2,7 +2,6 @@
 import { defineStore } from "pinia";
 import AdminDataService from "@/services/AdminDataService";
 import EditingDataService from "@/services/EditingDataService";
-import { computed } from "vue";
 
 export const useEditingStore = defineStore("editing", {
   state: () => ({
