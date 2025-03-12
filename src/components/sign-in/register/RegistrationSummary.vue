@@ -19,14 +19,15 @@
                 <span v-if="errors.about_self" class="mt-1 text-sm text-red-500">Введите о себе</span>
             </div>
 
-            <LoadingFilesForRegistration fileType="reviews" @file-selected="handleFileSelected" />
-            <LoadingFilesForRegistration fileType="portfolio" @file-selected="handleFileSelected" />
+            <AddFileReviews />
+            <AddFilePortfolio />
         </div>
     </div>
 </template>
 
 <script setup>
-import LoadingFilesForRegistration from '@/ui/LoadingFilesForRegistration.vue';
+import AddFileReviews from '@/components/sign-in/widgets/AddFileReviews.vue';
+import AddFilePortfolio from '@/components/sign-in/widgets/AddFilePortfolio.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { computed, onMounted, ref } from 'vue';
 import UserDataService from "@/services/UserDataService";
@@ -59,9 +60,9 @@ onMounted(() => {
 
 const handleFileSelected = (files, fileType) => {
     if (fileType === 'reviews') {
-        authStore.data.reviews = [...authStore.data.reviews, ...files];
+        authStore.reviews = [...authStore.reviews, ...files];
     } else if (fileType === 'portfolio') {
-        authStore.data.portfolio = [...authStore.data.portfolio, ...files];
+        authStore.portfolio = [...authStore.portfolio, ...files];
     }
 };
 

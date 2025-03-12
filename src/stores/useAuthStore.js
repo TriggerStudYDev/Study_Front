@@ -9,10 +9,13 @@ export const useAuthStore = defineStore("auth", {
     isAuth: false,
     userRole: null,
     userId: null,
+    student_id: null,
     profileId: null,
     isRegistered: false,
     selectedDepartment: null,
     verificationStatus: null,
+    reviews: [],
+    portfolio: [],
     data: {
       user: {
         username: "",
@@ -36,8 +39,6 @@ export const useAuthStore = defineStore("auth", {
         photo: null,
         about_self: "",
       },
-      reviews: [],
-      portfolio: [],
     },
   }),
   actions: {
@@ -62,7 +63,6 @@ export const useAuthStore = defineStore("auth", {
           this.userId = response.data.user_id;
           this.profileId = response.data.profile_id;
           localStorage.setItem("user_id", this.userId);
-          router.push({ name: "sending-questionnaire" });
           console.log(response);
         });
       } catch (error) {
@@ -97,13 +97,68 @@ export const useAuthStore = defineStore("auth", {
       formData.append("about_self", this.data.student_card.about_self);
 
       try {
-        await userDataService.postPhoto(formData);
+        await userDataService.postPhoto(formData).then((response) => {
+          this.student_id = response.data.id;
+        });
       } catch (error) {
         console.error("Ошибка загрузки фото:", {
           status: error.response?.status,
           data: error.response?.data,
           message: error.message,
         });
+        throw error;
+      }
+    },
+
+    async postReviews() {
+      if (!this.userId || !this.profileId) {
+        throw new Error("User ID или Profile ID отсутствует");
+      }
+
+      for (const file of this.reviews) {
+        const formData = new FormData();
+        formData.append(`photo`, file);
+        formData.append("student_card", this.student_id);
+
+        try {
+          await userDataService.postReviews(formData);
+          this.reviews = [];
+        } catch (error) {
+          console.error("Ошибка загрузки отзывов:", error.response?.data);
+          throw error;
+        }
+      }
+
+      this.reviews = [];
+    },
+
+    async postPortfolio() {
+      if (!this.userId || !this.profileId) {
+        throw new Error("User ID или Profile ID отсутствует");
+      }
+
+      for (const file of this.portfolio) {
+        const formData = new FormData();
+        formData.append(`photo`, file);
+        formData.append("student_card", this.student_id);
+
+        try {
+          await userDataService.postPortfolio(formData);
+          this.portfolio = [];
+        } catch (error) {
+          console.error("Ошибка загрузки портфолио:", error.response?.data);
+          throw error;
+        }
+      }
+
+      this.portfolio = [];
+    },
+
+    async submitAll() {
+      try {
+        await Promise.all([this.postReviews(), this.postPortfolio()]);
+      } catch (error) {
+        console.error("Ошибка при загрузке файлов:", error);
         throw error;
       }
     },
@@ -196,6 +251,14 @@ export const useAuthStore = defineStore("auth", {
       this.isAuth = false;
       this.userRole = null;
       this.verificationStatus = null;
+    },
+
+    setPortfolioPhoto(file) {
+      this.portfolio = [...this.portfolio, ...file];
+    },
+
+    setReviewsPhoto(file) {
+      this.reviews = [...this.reviews, ...file];
     },
 
     setStudentCardPhoto(file) {
