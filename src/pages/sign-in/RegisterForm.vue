@@ -4,7 +4,7 @@
             <div class="flex flex-col justify-center">
                 <div class="mt-6">
                     <h2 class="text-[40px] leading-[52px] font-semibold text-[#171717]">{{ pageContent[countPages].title
-                    }}</h2>
+                        }}</h2>
                     <p class="text-[#171717] text-xl mt-2">{{ pageContent[countPages].description }}</p>
                 </div>
                 <div class="flex flex-col w-full mt-8">
@@ -96,7 +96,7 @@ const handleClick = async () => {
             if (authStore.student_id) {
                 await authStore.submitAll();
             }
-            // router.push({ name: "sending-questionnaire" })
+            router.push({ name: "sending-questionnaire" })
         } catch (error) {
             console.error("Ошибка:", error);
         }
