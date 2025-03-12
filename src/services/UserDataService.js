@@ -22,6 +22,22 @@ export default {
     });
   },
 
+  postReviews(user) {
+    return http.post("api/auth/registration/customer-feedback-info/", user, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  postPortfolio(user) {
+    return http.post("api/auth/registration/portfolio-info/", user, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
   getUniversities() {
     return http.get("api/auth/universities/");
   },

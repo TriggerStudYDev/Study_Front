@@ -1,4 +1,4 @@
-<!-- src/LoadingFilesForRegistration.vue -->
+<!-- src/components/sign-in/widgets/AddFilePortfolio.vue -->
 <template>
     <div>
         <slot name="input">
@@ -18,9 +18,9 @@
         </div>
     </div>
 </template>
-
 <script setup>
 import { ref, computed } from 'vue';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 const props = defineProps({
     placeholder: { type: String, default: 'Загрузите файл' },
@@ -29,20 +29,38 @@ const props = defineProps({
 
 const emit = defineEmits(['file-selected']);
 const fileInput = ref(null);
+const authStore = useAuthStore();
 const fileSelected = ref(false);
-const fileName = ref('');
+const filesCount = ref(0);
 
 const inputValue = computed(() => {
-    return fileSelected.value ? `Выбрано файлов: ${fileName.value}` : '';
+    return fileSelected.value ? `Выбрано файлов: ${filesCount.value}` : '';
 });
+
+
 
 const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     if (files.length > 0) {
-        fileSelected.value = true;
-        fileName.value = files.length;
-        emit('file-selected', files, props.fileType);
+        // Валидация файлов
+        const validFiles = files.filter(file => {
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Файл слишком большой. Максимальный размер: 5MB');
+                return false;
+            }
+            if (!['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)) {
+                alert('Недопустимый формат файла');
+                return false;
+            }
+            return true;
+        });
+
+        if (validFiles.length > 0) {
+            authStore.setPortfolioPhoto(validFiles);
+            fileSelected.value = true;
+            filesCount.value = validFiles.length;
+        }
     }
-    event.target.value = ''
-};
+    event.target.value
+}
 </script>
