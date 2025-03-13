@@ -5,20 +5,20 @@
             <!-- Университеты -->
             <div class="col-span-2">
                 <select v-model="selectedUniversity" @change="fetchFaculties" :disabled="loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.universities }">
                     <option value="" disabled>ВУЗ</option>
                     <option v-for="university in universities" :key="university.id" :value="university.id">
                         {{ university.name }}
                     </option>
                 </select>
-                <span v-if="errors.universities" class="text-red-500 text-sm">{{ errors.universities }}</span>
+                <span v-if="errors.universities" class="text-sm text-red-500">{{ errors.universities }}</span>
             </div>
 
             <!-- Факультеты -->
             <div class="col-span-2">
                 <select v-model="selectedFaculty" @change="fetchDepartments" :disabled="!selectedUniversity || loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.faculties }">
                     <option value="" disabled>
                         {{ faculties.length ? 'Выберите факультет' : 'Нет доступных факультетов' }}
@@ -27,14 +27,14 @@
                         {{ faculty.name }}
                     </option>
                 </select>
-                <span v-if="errors.faculties" class="text-red-500 text-sm">{{ errors.faculties }}</span>
+                <span v-if="errors.faculties" class="text-sm text-red-500">{{ errors.faculties }}</span>
             </div>
 
             <!-- Кафедры -->
             <div class="col-span-2">
                 <select v-model="selectedDepartment" @change="fetchEducationForms"
                     :disabled="!selectedFaculty || loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.departments }">
                     <option value="" disabled>
                         {{ departments.length ? 'Выберите кафедру' : 'Нет доступных кафедр' }}
@@ -43,13 +43,13 @@
                         {{ department.name }}
                     </option>
                 </select>
-                <span v-if="errors.departments" class="text-red-500 text-sm">{{ errors.departments }}</span>
+                <span v-if="errors.departments" class="text-sm text-red-500">{{ errors.departments }}</span>
             </div>
 
             <!-- Курс -->
             <div>
                 <select v-model="course" :disabled="!selectedDepartment || loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.course }">
                     <option value="" disabled>{{ course.length ? 'Выберите курс' : 'Нет доступных курсов' }}</option>
                     <option value="1">1</option>
@@ -57,13 +57,13 @@
                     <option value="3">3</option>
                     <option value="4">4</option>
                 </select>
-                <span v-if="errors.course" class="text-red-500 text-sm">{{ errors.course }}</span>
+                <span v-if="errors.course" class="text-sm text-red-500">{{ errors.course }}</span>
             </div>
 
             <!-- Форма обучения -->
             <div>
                 <select v-model="selectEducationForm" :disabled="!selectedDepartment || loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.educationForms }">
                     <option value="" disabled>
                         {{ educationForms.length ? 'Уровень образования' : 'Нет доступных форм обучения' }}
@@ -72,13 +72,13 @@
                         {{ forms.name }}
                     </option>
                 </select>
-                <span v-if="errors.educationForms" class="text-red-500 text-sm">{{ errors.educationForms }}</span>
+                <span v-if="errors.educationForms" class="text-sm text-red-500">{{ errors.educationForms }}</span>
             </div>
 
             <!-- Загрузка студенческого билета -->
             <div class="col-span-2">
                 <LoadingStudentCard @file-selected="handleFileSelected" />
-                <span v-if="errors.studentCardFile" class="text-red-500 text-sm">{{ errors.studentCardFile }}</span>
+                <span v-if="errors.studentCardFile" class="text-sm text-red-500">{{ errors.studentCardFile }}</span>
             </div>
         </div>
     </div>

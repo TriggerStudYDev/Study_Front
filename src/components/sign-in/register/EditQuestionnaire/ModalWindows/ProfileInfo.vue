@@ -6,7 +6,7 @@
                 <img src="/image/auth/Close_MD.svg" alt="Close">
             </button>
             <div class="flex flex-col">
-                <h1 class="text-2xl font-semibold mt-2 text-PrimaryDark">Учебная информация</h1>
+                <h1 class="mt-2 text-2xl font-semibold text-PrimaryDark">Учебная информация</h1>
                 <p class="text-PrimaryDark">
                     Укажи данные о своём вузе: фото студенческого, курс, факультет и уровень образования. Это поможет
                     нам подбирать для тебя подходящие заказы или исполнителей.
@@ -44,20 +44,22 @@
                                 <input ref="fileInput" type="file" class="hidden" accept="image/*,.pdf"
                                     @change="handleFileUpdate" />
 
-                                <div @click="$refs.fileInput.click()"
-                                    class="cursor-pointer text-[#8C8C8C] hover:text-[#6C6C6C] transition-colors">
-                                    <p v-if="!form.photo">Прикрепи фото</p>
-                                    <p v-else class="text-[#4C4C4C]">Прикрепи фото</p>
+                                <div
+                                    class="flex gap-x-2 items-center cursor-pointer text-[#8C8C8C] hover:text-[#6C6C6C] transition-colors">
+                                    <a class="flex items-center bg-[#F2F2F2] px-2 py-1.5 text-TeriaryDark font-medium rounded-2xl"
+                                        target="_blank" v-if="form.photo">Фото.png <button @click="form.photo = ''"><img
+                                                src="/image/modal/closeInput.svg" alt=""></button></a>
+                                    <p @click="$refs.fileInput.click()">Студенческий</p>
                                 </div>
                             </div>
-                            <button><img src="/image/modal/File_Download.svg" alt=""></button>
+                            <button @click="$refs.fileInput.click()"><img src="/image/modal/File_Download.svg"
+                                    alt=""></button>
                         </div>
-                        <a class="bg-[#F2F2F2] px-2 py-1.5 text-TeriaryDark font-medium rounded-2xl" :href="form.photo"
-                            target="_blank" v-if="form.photo">Фото.png</a>
+
                     </div>
                 </div>
                 <button @click="saveChanges"
-                    class="px-8 py-3 bg-AccentViolet text-white rounded-lg text-xl font-medium leading-7 mt-8">
+                    class="px-8 py-3 mt-8 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet">
                     Сохранить
                 </button>
             </div>
