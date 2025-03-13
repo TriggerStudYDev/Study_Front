@@ -2,11 +2,10 @@
 <template>
     <div>
         <div class="grid grid-cols-1 gap-4 mt-8">
-            <!-- Заменяем <select multiple> на DisciplineSelector -->
             <div class="flex flex-col">
                 <DisciplineSelector v-model="selectDicsipline" :disciplines="descipline"
                     placeholder="Какие дисциплины вы решаете" :error="errors.selectDicsipline" />
-                <span v-if="errors.selectDicsipline" class="text-red-500 text-sm">
+                <span v-if="errors.selectDicsipline" class="text-sm text-red-500">
                     {{ errors.selectDicsipline }}
                 </span>
             </div>
@@ -16,7 +15,7 @@
                     class="px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none resize-none"
                     :class="{ 'border-red-500': errors.about_self }" placeholder="О себе"
                     v-model="authStore.data.student_card.about_self" rows="4"></textarea>
-                <span v-if="errors.about_self" class="text-red-500 text-sm mt-1">Введите о себе</span>
+                <span v-if="errors.about_self" class="mt-1 text-sm text-red-500">Введите о себе</span>
             </div>
 
             <LoadingFilesForRegistration fileType="reviews" @file-selected="handleFileSelected" />

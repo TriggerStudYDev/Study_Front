@@ -1,4 +1,3 @@
-<!-- src/components/sign-in/register/EditQuestionnaire/ModalWindows/ProfileInfo.vue -->
 <template>
     <div v-if="form" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
         :class="{ 'fade-out': animation }">
@@ -13,75 +12,22 @@
                     нам подбирать для тебя подходящие заказы или исполнителей.
                 </p>
                 <div class="grid grid-cols-2 gap-4 mt-8">
-
-                    <!-- ВУЗ -->
-                    <div class="col-span-2">
-                        <div v-if="form.university"
-                            class="flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                            <input v-model="form.university" type="text" placeholder="Вуз"
-                                class="w-full outline-none" />
-                            <button @click="form.university = ''; form.faculty = ''; form.department = '';"><img
-                                    src="/image/modal/closeInput.svg" alt=""></button>
-                        </div>
-
-                        <div v-else>
-                            <select v-model="selectedUniversity" @change="fetchFaculties" :disabled="loading"
-                                class="flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl w-full outline-none bg-transparent">
-                                <option value="" disabled>ВУЗ</option>
-                                <option v-for="university in universities" :key="university.id" :value="university.id">
-                                    {{ university.name }}
-                                </option>
-                            </select>
-                        </div>
+                    <div
+                        class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
+                        <input v-model="form.university" type="text" placeholder="Вуз" class="w-full outline-none" />
+                        <button @click="form.university = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
                     </div>
-
-                    <!-- Факультет -->
-                    <div class="col-span-2">
-                        <div v-if="form.faculty"
-                            class="flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                            <input v-model="form.faculty" type="text" placeholder="Факультет"
-                                class="w-full outline-none" />
-                            <button @click="form.faculty = ''; form.department = '';"><img
-                                    src="/image/modal/closeInput.svg" alt=""></button>
-                        </div>
-                        <div v-else>
-                            <select v-model="selectedFaculty" @change="fetchDepartments"
-                                :disabled="!selectedUniversity || loading"
-                                class="flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl w-full outline-none bg-transparent">
-                                <option value="" disabled>
-                                    {{ faculties.length ? 'Выберите факультет' : 'Нет доступных факультетов' }}
-                                </option>
-                                <option v-for="faculty in faculties" :key="faculty.id" :value="faculty.id">
-                                    {{ faculty.name }}
-                                </option>
-                            </select>
-                        </div>
+                    <div
+                        class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
+                        <input v-model="form.faculty" type="text" placeholder="Факультет" class="w-full outline-none" />
+                        <button @click="form.faculty = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
                     </div>
-
-                    <!-- Кафедра -->
-                    <div class="col-span-2">
-                        <div v-if="form.department"
-                            class="flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                            <input v-model="form.department" type="text" placeholder="Кафедра"
-                                class="w-full outline-none" />
-                            <button @click="form.department = ''"><img src="/image/modal/closeInput.svg"
-                                    alt=""></button>
-                        </div>
-
-                        <div v-else>
-                            <select v-model="selectedDepartment" @change="fetchEducationForms"
-                                :disabled="!selectedFaculty || loading"
-                                class="flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl w-full outline-none bg-transparent">
-                                <option value="" disabled>
-                                    {{ departments.length ? 'Выберите кафедру' : 'Нет доступных кафедр' }}
-                                </option>
-                                <option v-for="department in departments" :key="department.id" :value="department.id">
-                                    {{ department.name }}
-                                </option>
-                            </select>
-                        </div>
+                    <div
+                        class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
+                        <input v-model="form.department" type="text" placeholder="Кафедра"
+                            class="w-full outline-none" />
+                        <button @click="form.department = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
                     </div>
-
                     <div class="flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
                         <input v-model="form.course" type="text" placeholder="Курс" class="w-full outline-none" />
                         <button @click="form.course = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
@@ -110,7 +56,7 @@
                             target="_blank" v-if="form.photo">Фото.png</a>
                     </div>
                 </div>
-                <button @click="saveChanges"
+                <button @click="closeButton"
                     class="px-8 py-3 mt-8 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet">
                     Сохранить
                 </button>
@@ -122,90 +68,25 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import { useEditingStore } from '@/stores/useEditingStore';
-import UserDataService from '@/services/UserDataService';
 
 const editingStore = useEditingStore();
-const universities = ref([]);
-const faculties = ref([]);
-const departments = ref([]);
-const selectedUniversity = ref('');
-const selectedFaculty = ref('');
-const selectedDepartment = ref('');
 const emit = defineEmits(['close']);
 const fileInput = ref(null);
 const animation = ref(false)
-const loading = ref(false);
-
-const form = ref({
-    university: '',
-    faculty: '',
-    department: '',
-    course: '',
-    form_of_study: '',
-    photo: '',
-});
-
-// Исправленный watcher
-watch(() => [
-    editingStore.university,
-    editingStore.faculty, // Исправлено с faculties на faculty
-    editingStore.department,
-    editingStore.educationForms // Исправлено опечатку в edicationForms
-], (newValues) => {
-    form.value = {
-        university: editingStore.university?.name || '',
-        faculty: editingStore.faculty?.name || '', // Исправлено обращение к свойству
-        department: editingStore.department?.name || '',
-        course: editingStore.profile.course || '',
-        form_of_study: editingStore.profile.form_of_study || '',
-        photo: editingStore.profile.photo || ''
-    };
-}, { immediate: true, deep: true });
-
-const fetchFaculties = async () => {
-    if (!selectedUniversity.value) return;
-
-    loading.value = true;
-    try {
-        await UserDataService.getFaculties(selectedUniversity.value).then((response) => {
-            faculties.value = response.data.results || [];
-            form.value.faculty = selectedFaculty.value;
-        })
-    } catch (error) {
-        console.error('Ошибка получения факультетов:', error);
-        faculties.value = [];
-    } finally {
-        loading.value = false;
+const form = ref({ ...editingStore.profile })
+const handleFileUpdate = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        form.value.photo = file;
     }
 }
 
-const fetchDepartments = async () => {
-    if (!selectedFaculty.value) return;
-
-    loading.value = true;
-    try {
-        await UserDataService.getDepartments(selectedFaculty.value).then((response) => {
-            departments.value = response.data.results || [];
-            form.value.department = selectedDepartment.value;
-        })
-    } catch (error) {
-        console.error('Ошибка получения факультетов:', error);
-        departments.value = [];
-    } finally {
-        loading.value = false;
-    }
-}
-
-const saveChanges = async () => {
-    try {
-        await editingStore.updateProfile(form.value);
-        closeButton();
-    } catch (error) {
-        console.error('Ошибка при сохранении изменений:', error);
-    }
-}
+watch(form, (newForm) => {
+    editingStore.setChanges(newForm);
+}, { deep: true })
 
 const closeButton = () => {
+    editingStore.setChanges(form.value);
     animation.value = true;
     setTimeout(() => {
         emit('close');
@@ -214,15 +95,5 @@ const closeButton = () => {
 
 onMounted(async () => {
     await editingStore.getEducational();
-    loading.value = true;
-    try {
-        await UserDataService.getUniversities().then((response) => {
-            universities.value = response.data.results || [];
-        })
-    } catch (error) {
-        console.error("Ошибка при загрузке университетов:", error);
-    } finally {
-        loading.value = false;
-    }
 });
 </script>

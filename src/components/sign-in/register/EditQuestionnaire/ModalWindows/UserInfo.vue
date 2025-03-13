@@ -1,4 +1,4 @@
-<!-- src/components/sign-in/register/EditQuestionnaire/ModalWindows/ProfileInfo.vue -->
+<!-- src/components/sign-in/register/EditQuestionnaire/ModalWindows/UserInfo.vue -->
 <template>
     <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
         :class="{ 'fade-out': animation }">
@@ -27,7 +27,7 @@
                     </div>
                     <div
                         class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input v-model="editingStore.email" type="text" placeholder="Email*" class="w-full outline-none"
+                        <input v-model="form.email" type="text" placeholder="Email*" class="w-full outline-none"
                             disabled />
                     </div>
                     <socialMedia @click="openModal('telegram')">
@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { useEditingStore } from '@/stores/useEditingStore';
 import SocialMedia from '@/components/sign-in/widgets/SocialMedia.vue';
 import { useModalStore } from '@/stores/useModalStore';
@@ -67,11 +67,6 @@ const modalStore = useModalStore();
 const { openModal } = modalStore;
 const animation = ref(false);
 const form = ref({ ...editingStore.profile });
-
-
-watch(() => editingStore.profile, (newProfile) => {
-    form.value = { ...newProfile };
-}, { deep: true });
 
 watch(form, (newForm) => {
     editingStore.setChanges(newForm);

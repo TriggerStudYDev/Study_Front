@@ -1,4 +1,3 @@
-<!-- src/pages/sign-in/EditQuestionnaire.vue -->
 <template>
     <div class="mt-6">
         <h1 class="text-3xl font-semibold text-white">Редактирование анкеты</h1>
@@ -36,28 +35,18 @@ import { onMounted, ref } from 'vue';
 const activeModal = ref(null);
 const editingStore = useEditingStore();
 
-// Открытие модального окна
-const openModal = async (modalName) => {// Загружаем данные перед открытием
+const openModal = async (modalName) => {
     activeModal.value = modalName;
 };
 
-// Закрытие модального окна
 const closeModal = () => {
     activeModal.value = null;
 };
 
-// Сохранение всех изменений
 const saveChanges = async () => {
-    try {
-        await editingStore.saveChanges();
-        await editingStore.getProfile();
-        console.log("Все изменения сохранены");
-    } catch (error) {
-        console.error("Ошибка при сохранении изменений:", error);
-    }
+    await editingStore.saveChanges();
 };
 
-// Загружаем данные при монтировании компонента
 onMounted(async () => {
     await editingStore.getProfile();
 });
