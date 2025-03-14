@@ -7,19 +7,19 @@
                         }}</h2>
                     <p class="text-[#171717] text-xl mt-2">{{ pageContent[countPages].description }}</p>
                 </div>
-                <div class="flex flex-col mt-8 w-full">
+                <div class="flex flex-col w-full mt-8">
                     <CountPageRegister class="mx-auto" :countPages="countPages" />
                     <component :typeAuth="typeAuth" @toggle-auth="$emit('toggle-auth')" class="mt-8"
                         :is="currentComponent" ref="currentForm" @next-step="nextPage" @prev-step="prevStep"
                         @update:isValid="isValid = $event" @file-selected="handleFileSelected"
                         @open-modal="$emit('open-modal')" />
                 </div>
-                <div class="flex flex-col gap-x-4 mt-8">
-                    <button class="px-8 py-3 bg-AccentViolet text-white rounded-lg text-xl font-medium leading-7"
+                <div class="flex flex-col mt-8 gap-x-4">
+                    <button class="px-8 py-3 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet"
                         @click="handleClick">
                         {{ countPages === 3 ? 'Готово' : 'Продолжить' }}
                     </button>
-                    <button class="px-8 py-3 bg-white text-AccentViolet rounded-lg text-xl font-medium leading-7 mt-2"
+                    <button class="px-8 py-3 mt-2 text-xl font-medium leading-7 bg-white rounded-lg text-AccentViolet"
                         @click="handleClickLogin">{{ countPages === 1 ? 'Войти в аккаунт' : 'Назад' }}</button>
                 </div>
             </div>
@@ -93,7 +93,10 @@ const handleClick = async () => {
         try {
             await authStore.register();
             await authStore.postPhoto();
-            // await authStore.uploadUpdate(); // Отправляем файлы после регистрации
+            if (authStore.student_id) {
+                await authStore.submitAll();
+            }
+            router.push({ name: "sending-questionnaire" })
         } catch (error) {
             console.error("Ошибка:", error);
         }
