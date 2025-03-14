@@ -5,7 +5,7 @@
             <!-- Университеты -->
             <div class="col-span-2">
                 <select v-model="selectedUniversity" @change="fetchFaculties" :disabled="loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.universities }">
                     <option value="" disabled>ВУЗ</option>
                     <option v-for="university in universities" :key="university.id" :value="university.id">
@@ -18,7 +18,7 @@
             <!-- Факультеты -->
             <div class="col-span-2">
                 <select v-model="selectedFaculty" @change="fetchDepartments" :disabled="!selectedUniversity || loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.faculties }">
                     <option value="" disabled>
                         {{ faculties.length ? 'Выберите факультет' : 'Нет доступных факультетов' }}
@@ -34,7 +34,7 @@
             <div class="col-span-2">
                 <select v-model="selectedDepartment" @change="fetchEducationForms"
                     :disabled="!selectedFaculty || loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.departments }">
                     <option value="" disabled>
                         {{ departments.length ? 'Выберите кафедру' : 'Нет доступных кафедр' }}
@@ -49,7 +49,7 @@
             <!-- Курс -->
             <div>
                 <select v-model="course" :disabled="!selectedDepartment || loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.course }">
                     <option value="" disabled>{{ course.length ? 'Выберите курс' : 'Нет доступных курсов' }}</option>
                     <option value="1">1</option>
@@ -63,7 +63,7 @@
             <!-- Форма обучения -->
             <div>
                 <select v-model="selectEducationForm" :disabled="!selectedDepartment || loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.educationForms }">
                     <option value="" disabled>
                         {{ educationForms.length ? 'Уровень образования' : 'Нет доступных форм обучения' }}

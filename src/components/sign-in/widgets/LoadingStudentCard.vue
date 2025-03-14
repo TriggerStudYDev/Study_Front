@@ -1,16 +1,16 @@
 <template>
     <div class="">
         <input type="file" class="hidden" @change="handleFileChange" accept="image/*,.pdf" ref="fileInput">
-        <div class="px-6 py-3 border bg-transparent border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none cursor-pointer"
+        <div class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] bg-white font-sans rounded-lg font-medium text-TeriaryDark cursor-pointer text-bse focus:outline-none"
             @click="$refs.fileInput.click()">
-            <p class=" text-TeriaryDark">
+            <p class="">
                 <span v-if="!fileSelected">Фото студенческого</span>
-                <span v-else class="text-TeriaryDark">
+                <span v-else class="">
                     Выбран файл: {{ fileName }}
                 </span>
             </p>
         </div>
-        <span class="text-TeriaryDark text-xs font-medium px-4 mt-1">Подсказка PNG, JPG</span>
+        <span class="px-4 mt-1 text-xs font-medium text-TeriaryDark">Подсказка PNG, JPG</span>
     </div>
 </template>
 

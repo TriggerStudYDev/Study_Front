@@ -15,32 +15,32 @@
                     class="w-full px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.email }" type="email" placeholder="Email*" v-model="auth.email"
                     @input="errors.email = false">
-                <span v-if="errors.email" class="text-red-500 text-sm mt-1">Введите корректный email</span>
+                <span v-if="errors.email" class="mt-1 text-sm text-red-500">Введите корректный email</span>
             </div>
             <div class="col-span-2">
                 <input
                     class="w-full px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.password }" type="password" placeholder="Пароль*"
                     v-model="auth.password">
-                <span v-if="errors.password" class="text-red-500 text-sm mt-1">Введите пароль</span>
+                <span v-if="errors.password" class="mt-1 text-sm text-red-500">Введите пароль</span>
             </div>
             <div class="col-span-2">
                 <input
                     class="w-full px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.password_repeat }" type="password"
                     placeholder="Повторите пароль*" v-model="passwordRepeat">
-                <span v-if="errors.password_repeat" class="text-red-500 text-sm mt-1">Пароли не совпадают</span>
+                <span v-if="errors.password_repeat" class="mt-1 text-sm text-red-500">Пароли не совпадают</span>
             </div>
         </div>
         <div class="mt-4">
-            <h3 class="text-PrimaryDark text-2xl font-medium">Укажи удобный способ связи</h3>
-            <p class="text-LightDark mt-2 leading-5">Добавь Telegram или ВКонтакте. Мы напишем только в случае вопросов
+            <h3 class="text-2xl font-medium text-PrimaryDark">Укажи удобный способ связи</h3>
+            <p class="mt-2 leading-5 text-LightDark">Добавь Telegram или ВКонтакте. Мы напишем только в случае вопросов
                 по заказу.
                 Чем
                 больше контактов, тем
                 проще связаться!</p>
         </div>
-        <div class="flex gap-x-3 mt-4">
+        <div class="flex mt-4 gap-x-3">
             <socialMedia @click="openModal('telegram')">
                 <template #image>
                     <img src="/image/auth/telegram.svg" alt="socialMedia">
@@ -112,6 +112,7 @@ const validateForm = () => {
         password_repeat: auth.value.password !== passwordRepeat.value ? 'Пароли не совпадают' : '',
         vk_profile: !authStore.data.profile.vk_profile ? 'Введите ссылку на ваш профиль в VK' : '',
         telegram_username: !authStore.data.profile.telegram_username ? 'Введите ваш ник в Telegram' : '',
+        boxChecking: !isAgreementChecked.value ? 'Подтвердите соглашение' : '',
     }
 
     return !Object.values(errors.value).some(error => error);
