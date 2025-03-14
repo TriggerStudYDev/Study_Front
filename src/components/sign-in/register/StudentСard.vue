@@ -214,13 +214,6 @@ watch([selectedUniversity, selectedFaculty, selectEducationForm, selectedDepartm
     authStore.data.profile.department = selectedDepartment.value;
     authStore.data.profile.form_of_study = selectEducationForm.value;
     authStore.data.profile.course = course.value;
-    // registrationStore.setSelectedUniversity();
-    // registrationStore.setSelectedFaculuty();
-    // registrationStore.setSelectedDepartment();
-    // registrationStore.setSelectedEducationForm();
-    // registrationStore.setSelectedCourse();
-    // registrationStore.setVkProfile();
-    // registrationStore.setTelegramUsername();
 });
 
 

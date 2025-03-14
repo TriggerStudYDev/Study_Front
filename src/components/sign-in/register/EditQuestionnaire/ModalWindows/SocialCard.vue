@@ -1,21 +1,21 @@
-<!-- src/components/sign-in/register/EditQuestionnaire/ModalWindows/SocialCard.vue -->
 <template>
-    <div class="fixed inset-0">
-        <div class="bg-white px-6 pt-5 pb-12 rounded-2xl max-w-[510px] mx-auto mt-[20vh] w-full slide-up">
+    <div class="fixed inset-0" :class="{ 'fade-out': animation }">
+        <div class="bg-white px-6 pt-5 pb-12 rounded-2xl max-w-[510px] mx-auto mt-[20vh] w-full slide-up"
+            :class="{ 'slide-down': animation }">
             <button @click="closeModal" class="mb-4">
                 <img src="/image/auth/left.svg" alt="Left" loading="lazy">
             </button>
             <div class="flex flex-col items-center">
                 <img width="56" :src="socialData.icon" :alt="socialData.title">
-                <h4 class="mt-4 text-2xl text-PrimaryDark font-medium">{{ socialData.title }}</h4>
+                <h4 class="mt-4 text-2xl font-medium text-PrimaryDark">{{ socialData.title }}</h4>
                 <span class="mt-2 text-LightDark">{{ socialData.subtitle }}</span>
             </div>
             <div class="flex flex-col mt-8">
                 <input class="px-6 py-3 border border-[#BFBFBF] rounded-lg font-medium focus:outline-none" type="text"
-                    :placeholder="socialData.placeholder" v-model="editingStore.profile.profile[socialData.storeField]">
-                <button class="mt-8 w-full py-3 bg-AccentViolet text-white text-xl font-medium rounded-xl"
-                    @click="saveSocial">
-                    Сохранить
+                    :placeholder="socialData.placeholder" v-model="form[socialData.storeField]">
+                <button @click="closeButton"
+                    class="px-8 py-3 mt-8 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet">
+                    Закрыть
                 </button>
             </div>
         </div>
@@ -25,25 +25,22 @@
 <script setup>
 import { useModalStore } from '@/stores/useModalStore';
 import { useEditingStore } from '@/stores/useEditingStore';
-import { computed, watch, ref } from 'vue';
+import { computed, watch, ref, onMounted } from 'vue';
 
 const modalStore = useModalStore();
+const animation = ref(false);
 const editingStore = useEditingStore();
-const emit = defineEmits(['file-selected']);
 const { closeModal } = modalStore;
-const form = ref({
-    vk_profile: '',
-    telegram_username: '',
-})
+const form = ref({ ...editingStore.profile });
 
-watch(() => editingStore.profile, (newProfile) => {
-    if (newProfile) {
-        form.value = {
-            vk_profile: newProfile.profile.vk_profile || '',
-            telegram_username: newProfile.profile.telegram_username || '',
-        };
-    }
-})
+watch(
+    () => form.value,
+    (newForm) => {
+        editingStore.setChanges(newForm);
+    },
+    { deep: true }
+);
+
 const props = defineProps({
     socialType: {
         type: String,
@@ -53,33 +50,31 @@ const props = defineProps({
 });
 
 const socialData = computed(() => {
-    return {
+    const data = {
         telegram: {
             icon: '/image/auth/telegram.svg',
             title: 'Telegram',
-            subtitle: 'Добавить контакт',
             placeholder: '@username',
             storeField: 'telegram_username',
         },
         vk: {
             icon: '/image/auth/vk.svg',
             title: 'ВКонтакте',
-            subtitle: 'Добавить контакт',
             placeholder: 'vk.com/username',
             storeField: 'vk_profile',
         },
     }[props.socialType];
+    return data;
 });
 
-const saveSocial = () => {
-    // const field = socialData.value.storeField; // Поле (telegram_username или vk_profile)
-    // const value = editingStore.profile.profile[field]; // Значение из input
-
-    // // Обновляем состояние в хранилище
-    // editingStore.updateProfile({
-    //     [field]: value,
-    // });
-
-    closeModal();
+const closeButton = () => {
+    editingStore.setChanges({ ...form.value });
+    modalStore.setSocialData({ [props.socialType]: form.value[props.socialType] });
+    animation.value = true;
+    setTimeout(() => {
+        emit('close', form.value);
+    }, 300);
 };
+
+const emit = defineEmits(['close']);
 </script>

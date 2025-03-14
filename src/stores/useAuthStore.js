@@ -109,7 +109,6 @@ export const useAuthStore = defineStore("auth", {
         throw error;
       }
     },
-
     async postReviews() {
       if (!this.userId || !this.profileId) {
         throw new Error("User ID или Profile ID отсутствует");
@@ -159,35 +158,6 @@ export const useAuthStore = defineStore("auth", {
         await Promise.all([this.postReviews(), this.postPortfolio()]);
       } catch (error) {
         console.error("Ошибка при загрузке файлов:", error);
-        throw error;
-      }
-    },
-
-    async uploadUpdate() {
-      try {
-        // Для отзывов
-        const reviewsFormData = new FormData();
-        reviewsFormData.append("user", this.userId);
-        reviewsFormData.append("profile", this.profileId);
-        this.data.reviews.forEach((file, index) => {
-          reviewsFormData.append(`reviews`, file); // Ключ должен соответствовать ожиданиям сервера
-        });
-
-        // Для портфолио
-        const portfolioFormData = new FormData();
-        portfolioFormData.append("user", this.userId);
-        portfolioFormData.append("profile", this.profileId);
-        this.data.portfolio.forEach((file, index) => {
-          portfolioFormData.append(`portfolio`, file); // Ключ должен соответствовать ожиданиям сервера
-        });
-
-        // Отправляем отдельные запросы для отзывов и портфолио
-        await userDataService.uploadFile(reviewsFormData);
-        await userDataService.uploadFile(portfolioFormData);
-
-        console.log("Все файлы успешно отправлены");
-      } catch (error) {
-        console.error("Ошибка загрузки файлов:", error);
         throw error;
       }
     },
