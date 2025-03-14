@@ -16,11 +16,6 @@
         <Skill v-if="activeModal === 'Skill'" @close="closeModal" />
         <UserInfo v-if="activeModal === 'UserInfo'" @close="closeModal" />
 
-        <!-- Кнопка сохранения изменений -->
-        <button @click="saveChanges"
-            class="px-8 py-3 mt-6 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet">
-            Сохранить изменения
-        </button>
     </div>
 </template>
 
@@ -41,10 +36,6 @@ const openModal = async (modalName) => {
 
 const closeModal = () => {
     activeModal.value = null;
-};
-
-const saveChanges = async () => {
-    await editingStore.saveChanges();
 };
 
 onMounted(async () => {

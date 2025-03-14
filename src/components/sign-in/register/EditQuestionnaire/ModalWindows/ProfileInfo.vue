@@ -53,16 +53,17 @@
 
                                 <div
                                     class="flex gap-x-2 items-center cursor-pointer text-[#8C8C8C] hover:text-[#6C6C6C] transition-colors">
-                                    <a class="flex items-center bg-[#F2F2F2] px-2 py-1.5 text-TeriaryDark font-medium rounded-2xl"
-                                        target="_blank" v-if="form.photo">Фото.png <button @click="form.photo = ''"><img
-                                                src="/image/modal/closeInput.svg" alt=""></button></a>
+                                    <div v-if="form.photo"
+                                        class="flex items-center bg-[#F2F2F2] px-2 py-1.5 text-TeriaryDark font-medium rounded-2xl">
+                                        <a :href="form.photo" target="_blank" v-if="form.photo">Фото.png</a>
+                                        <button @click="form.photo = ''"><img src="/image/modal/closeInput.svg"
+                                                alt=""></button>
+                                    </div>
                                     <p @click="$refs.fileInput.click()">Студенческий</p>
                                 </div>
                             </div>
                             <button><img src="/image/modal/File_Download.svg" alt=""></button>
                         </div>
-                        <a class="bg-[#F2F2F2] px-2 py-1.5 text-TeriaryDark font-medium rounded-2xl" :href="form.photo"
-                            target="_blank" v-if="form.photo">Фото.png</a>
                     </div>
                 </div>
                 <button @click="closeButton"

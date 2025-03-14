@@ -5,15 +5,18 @@
             <QuestionnaireCard v-for="(card, index) in card" :key="card.id" :card="card"
                 :class="`animate-down delay-${index}`" @open-modal="openModal" />
         </div>
-        <button
-            class="col-span-3 px-8 py-3 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet mt-[30%]">Отправить
-            на проверку</button>
+        <button @click="saveChanges"
+            class="px-8 py-3 mt-6 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet">
+            Сохранить изменения
+        </button>
     </div>
 </template>
 
 <script setup>
 import QuestionnaireCard from '@/components/sign-in/register/EditQuestionnaire/QuestionnaireCard.vue';
+import { useEditingStore } from '@/stores/useEditingStore';
 
+const editingStore = useEditingStore();
 const card = [
     {
         id: 1,
@@ -35,7 +38,7 @@ const card = [
         id: 3,
         backgroundImage: '/image/questionnaire/Card_ankety-image-3.png',
         iconImage: '/image/questionnaire/star.svg',
-        title: 'Навыки и достижеения',
+        title: 'Навыки и достижения',
         desctiption: 'Дисциплины, навыки, портфолио',
         openModal: 'Skill',
     },
@@ -44,6 +47,10 @@ const card = [
 // Передача события открытия модального окна
 const openModal = (modalName) => {
     emit('open-modal', modalName);
+};
+
+const saveChanges = async () => {
+    await editingStore.saveChanges();
 };
 
 const emit = defineEmits(['open-modal']);
