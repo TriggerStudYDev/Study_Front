@@ -1,3 +1,4 @@
+<!-- src/components/sign-in/register/EditQuestionnaire/Questionnaire.vue -->
 <template>
     <div class="flex flex-col items-center">
         <div class="grid grid-cols-3 gap-x-[30px] mt-6">

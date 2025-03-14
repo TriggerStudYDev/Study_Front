@@ -2,7 +2,6 @@
 <template>
     <div>
         <div class="grid grid-cols-1 gap-4 mt-8">
-            <!-- Заменяем <select multiple> на DisciplineSelector -->
             <div class="flex flex-col">
                 <DisciplineSelector v-model="selectDicsipline" :disciplines="descipline"
                     placeholder="Какие дисциплины вы решаете" :error="errors.selectDicsipline" />

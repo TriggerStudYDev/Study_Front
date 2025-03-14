@@ -3,16 +3,16 @@
         :style="{ height: inOpen ? 'auto' : '100px' }">
         <div class="flex items-start gap-x-4" :class="{ 'justify-between': !inOpen }">
             <img src="/image/questionnaire/Mask group.svg" alt="" v-if="inOpen">
-            <div class="flex gap-x-4 items-start" v-if="!inOpen">
+            <div class="flex items-start gap-x-4" v-if="!inOpen">
                 <img src="/image/questionnaire/Mask group.svg" alt="">
                 <div class="flex flex-col">
-                    <h2 class="text-DisabledDark text-2xl font-semibold">StudY</h2>
+                    <h2 class="text-2xl font-semibold text-DisabledDark">StudY</h2>
                     <h5 class="text-[#8C8C8C] text-sm">12.12.2024 - 13:29</h5>
                 </div>
             </div>
             <div class="flex flex-col w-full" v-if="inOpen">
-                <h2 class="text-DisabledDark text-2xl font-semibold">StudY</h2>
-                <p class="text-DisabledDark py-3 transition-opacity duration-500 ease-in-out"
+                <h2 class="text-2xl font-semibold text-DisabledDark">StudY</h2>
+                <p class="py-3 transition-opacity duration-500 ease-in-out text-DisabledDark"
                     :class="{ 'opacity-0': !inOpen, 'opacity-100': inOpen }">
                     Уважаемый пользователь, <br>
                     Благодарим вас за заполнение заявки на нашей платформе StudY. Мы внимательно рассмотрели
@@ -32,7 +32,7 @@
                     12.12.2024 - 13:29
                 </h5>
             </div>
-            <button @click="inOpen = !inOpen" class="text-DisabledDark transition-transform duration-300  w-12"
+            <button @click="inOpen = !inOpen" class="w-12 transition-transform duration-300 text-DisabledDark"
                 :class="{ 'rotate-180': inOpen }">
                 /\
             </button>

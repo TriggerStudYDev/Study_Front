@@ -51,10 +51,12 @@
                                 <input ref="fileInput" type="file" class="hidden" accept="image/*,.pdf"
                                     @change="handleFileUpdate" />
 
-                                <div @click="$refs.fileInput.click()"
-                                    class="cursor-pointer text-[#8C8C8C] hover:text-[#6C6C6C] transition-colors">
-                                    <p v-if="!form.photo">Прикрепи фото</p>
-                                    <p v-else class="text-[#4C4C4C]">Прикрепи фото</p>
+                                <div
+                                    class="flex gap-x-2 items-center cursor-pointer text-[#8C8C8C] hover:text-[#6C6C6C] transition-colors">
+                                    <a class="flex items-center bg-[#F2F2F2] px-2 py-1.5 text-TeriaryDark font-medium rounded-2xl"
+                                        target="_blank" v-if="form.photo">Фото.png <button @click="form.photo = ''"><img
+                                                src="/image/modal/closeInput.svg" alt=""></button></a>
+                                    <p @click="$refs.fileInput.click()">Студенческий</p>
                                 </div>
                             </div>
                             <button><img src="/image/modal/File_Download.svg" alt=""></button>
@@ -90,7 +92,11 @@ const form = ref({ ...editingStore.profile });
 const handleFileUpdate = (event) => {
     const file = event.target.files[0];
     if (file) {
-        form.value.photo = file;
+        const reader = new FileReader();
+        reader.onload = () => {
+            form.value.photo = reader.result;
+        };
+        reader.readAsDataURL(file);
     }
 };
 

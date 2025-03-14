@@ -20,4 +20,8 @@ export default {
   getEducationForms(id) {
     return http.get(`api/auth/education-forms/${id}/`);
   },
+
+  putUpdateProfile(data) {
+    return http.put("api/auth/student-card/update/", data);
+  },
 };

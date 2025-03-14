@@ -6,14 +6,14 @@
             </button>
             <div class="flex flex-col items-center">
                 <img width="56" :src="socialData.icon" :alt="socialData.title">
-                <h4 class="mt-4 text-2xl text-PrimaryDark font-medium">{{ socialData.title }}</h4>
+                <h4 class="mt-4 text-2xl font-medium text-PrimaryDark">{{ socialData.title }}</h4>
                 <span class="mt-2 text-LightDark">{{ socialData.subtitle }}</span>
             </div>
             <div class="flex flex-col mt-8">
                 <input
                     class="px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
                     type="text" :placeholder="socialData.placeholder" v-model="profile[socialData.storeField]">
-                <button class="mt-8 w-full py-3 bg-AccentViolet text-white text-xl font-medium rounded-xl"
+                <button class="w-full py-3 mt-8 text-xl font-medium text-white bg-AccentViolet rounded-xl"
                     @click="saveSocial">
                     Сохранить
                 </button>
