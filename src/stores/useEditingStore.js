@@ -21,7 +21,7 @@ export const useEditingStore = defineStore("editing", {
       faculty: null,
       department: null,
       form_of_study: null,
-      discipline: null,
+      discipline: [],
     },
     initialProfile: {},
     university: null,
@@ -38,27 +38,24 @@ export const useEditingStore = defineStore("editing", {
       try {
         const response = await AdminDataService.getProfile();
         this.user = response.data.results[0] || {};
-
-        // Инициализация профиля
         this.profile = {
           first_name: this.user.user?.first_name || "",
           last_name: this.user.user?.last_name || "",
           vk_profile: this.user.profile?.vk_profile || "",
           telegram_username: this.user.profile?.telegram_username || "",
           email: this.user.user?.email || "",
+          about_self: this.user?.about_self || "",
           course: this.user.profile?.course || null,
           form_of_study: this.user.profile?.form_of_study || null,
           photo: this.user?.photo || null,
-          about_self: this.user?.about_self || "",
-          customer_feedback: this.user?.customer_feedback || [],
-          portfolio: this.user?.portfolio || [],
           university: this.user.profile?.university || null,
           faculty: this.user.profile?.faculty || null,
           department: this.user.profile?.department || null,
           form_of_study: this.user.profile?.form_of_study || null,
-          discipline: this.user.profile?.discipline || null,
+          customer_feedback: this.user?.customer_feedback || [],
+          portfolio: this.user?.portfolio || [],
+          discipline: this.user.profile?.disciplines || [],
         };
-        // Сохраняем исходные данные
         this.initialProfile = { ...this.profile };
         console.log("Получен профиль:", this.user);
       } catch (error) {

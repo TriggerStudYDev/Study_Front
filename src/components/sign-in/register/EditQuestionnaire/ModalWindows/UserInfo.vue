@@ -68,10 +68,13 @@ const { openModal } = modalStore;
 const animation = ref(false);
 const form = ref({ ...editingStore.profile });
 
-watch(form, (newForm) => {
-    editingStore.setChanges(newForm);
-}, { deep: true });
-
+watch(
+    () => editingStore.profile,
+    (newProfile) => {
+        form.value = { ...newProfile };
+    },
+    { deep: true }
+);
 const closeButton = () => {
     editingStore.setChanges(form.value);
     animation.value = true;

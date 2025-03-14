@@ -1,4 +1,3 @@
-<!-- src/components/sign-in/register/EditQuestionnaire/ModalWindows/SocialCard.vue -->
 <template>
     <div class="fixed inset-0" :class="{ 'fade-out': animation }">
         <div class="bg-white px-6 pt-5 pb-12 rounded-2xl max-w-[510px] mx-auto mt-[20vh] w-full slide-up"
@@ -26,18 +25,18 @@
 <script setup>
 import { useModalStore } from '@/stores/useModalStore';
 import { useEditingStore } from '@/stores/useEditingStore';
-import { computed, watch, ref } from 'vue';
+import { computed, watch, ref, onMounted } from 'vue';
 
 const modalStore = useModalStore();
+const animation = ref(false);
 const editingStore = useEditingStore();
 const { closeModal } = modalStore;
-const form = ref({ ...editingStore.profile }); // Данные из хранилища
+const form = ref({ ...editingStore.profile });
 
-// Следим за изменениями в форме и обновляем хранилище
 watch(
     () => form.value,
     (newForm) => {
-        editingStore.setChanges(newForm); // Сохраняем изменения сразу
+        editingStore.setChanges(newForm);
     },
     { deep: true }
 );
@@ -50,24 +49,31 @@ const props = defineProps({
     },
 });
 
-const socialData = computed(() => ({
-    telegram: {
-        icon: '/image/auth/telegram.svg',
-        title: 'Telegram',
-        placeholder: '@username',
-        storeField: 'telegram_username',
-    },
-    vk: {
-        icon: '/image/auth/vk.svg',
-        title: 'ВКонтакте',
-        placeholder: 'vk.com/username',
-        storeField: 'vk_profile',
-    },
-}[props.socialType]));
+const socialData = computed(() => {
+    const data = {
+        telegram: {
+            icon: '/image/auth/telegram.svg',
+            title: 'Telegram',
+            placeholder: '@username',
+            storeField: 'telegram_username',
+        },
+        vk: {
+            icon: '/image/auth/vk.svg',
+            title: 'ВКонтакте',
+            placeholder: 'vk.com/username',
+            storeField: 'vk_profile',
+        },
+    }[props.socialType];
+    return data;
+});
 
 const closeButton = () => {
-    editingStore.setChanges(form.value); // Финализируем изменения
-    emit('close');
+    editingStore.setChanges({ ...form.value });
+    modalStore.setSocialData({ [props.socialType]: form.value[props.socialType] });
+    animation.value = true;
+    setTimeout(() => {
+        emit('close', form.value);
+    }, 300);
 };
 
 const emit = defineEmits(['close']);
