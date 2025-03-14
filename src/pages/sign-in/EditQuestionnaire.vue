@@ -11,9 +11,16 @@
             <router-view @open-modal="openModal" />
         </main>
 
+        <!-- Модальные окна -->
         <ProfileInfo v-if="activeModal === 'ProfileInfo'" @close="closeModal" />
         <Skill v-if="activeModal === 'Skill'" @close="closeModal" />
         <UserInfo v-if="activeModal === 'UserInfo'" @close="closeModal" />
+
+        <!-- Кнопка сохранения изменений -->
+        <button @click="saveChanges"
+            class="px-8 py-3 mt-6 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet">
+            Сохранить изменения
+        </button>
     </div>
 </template>
 
@@ -28,7 +35,7 @@ import { onMounted, ref } from 'vue';
 const activeModal = ref(null);
 const editingStore = useEditingStore();
 
-const openModal = (modalName) => {
+const openModal = async (modalName) => {
     activeModal.value = modalName;
 };
 
@@ -36,8 +43,11 @@ const closeModal = () => {
     activeModal.value = null;
 };
 
-// Загружаем данные при монтировании компонента
-onMounted(() => {
-    editingStore.getEding();
+const saveChanges = async () => {
+    await editingStore.saveChanges();
+};
+
+onMounted(async () => {
+    await editingStore.getProfile();
 });
 </script>

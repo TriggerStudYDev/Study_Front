@@ -14,28 +14,35 @@
                 <div class="grid grid-cols-2 gap-4 mt-8">
                     <div
                         class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input v-model="form.university" type="text" placeholder="Вуз" class="w-full outline-none" />
-                        <button @click="form.university = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
+                        <input v-model="universities.name" type="text" placeholder="Вуз" class="w-full outline-none"
+                            readonly />
+                        <button @click="form.university = null; universities = ''">
+                            <img src="/image/modal/closeInput.svg" alt="">
+                        </button>
                     </div>
                     <div
                         class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input v-model="form.faculty" type="text" placeholder="Факультет" class="w-full outline-none" />
-                        <button @click="form.faculty = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
-                    </div>
-                    <div
-                        class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input v-model="form.department" type="text" placeholder="Кафедра"
+                        <input v-model="facilties.name" type="text" placeholder="Факультет"
                             class="w-full outline-none" />
-                        <button @click="form.department = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
+                        <button @click="form.faculty = null; facilties = ''"><img src="/image/modal/closeInput.svg"
+                                alt=""></button>
+                    </div>
+                    <div
+                        class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
+                        <input v-model="departments.name" type="text" placeholder="Кафедра"
+                            class="w-full outline-none" />
+                        <button @click="form.department = null; departments = ''"><img src="/image/modal/closeInput.svg"
+                                alt=""></button>
                     </div>
                     <div class="flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
                         <input v-model="form.course" type="text" placeholder="Курс" class="w-full outline-none" />
                         <button @click="form.course = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
                     </div>
                     <div class="flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input v-model="form.speciality" type="text" placeholder="Уровень образования"
+                        <input v-model="educationForms.name" type="text" placeholder="Уровень образования"
                             class="w-full outline-none" />
-                        <button @click="form.speciality = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
+                        <button @click="form.form_of_study = null; educationForms = ''"><img
+                                src="/image/modal/closeInput.svg" alt=""></button>
                     </div>
                     <div class="col-span-2">
                         <div
@@ -44,21 +51,19 @@
                                 <input ref="fileInput" type="file" class="hidden" accept="image/*,.pdf"
                                     @change="handleFileUpdate" />
 
-                                <div
-                                    class="flex gap-x-2 items-center cursor-pointer text-[#8C8C8C] hover:text-[#6C6C6C] transition-colors">
-                                    <a class="flex items-center bg-[#F2F2F2] px-2 py-1.5 text-TeriaryDark font-medium rounded-2xl"
-                                        target="_blank" v-if="form.photo">Фото.png <button @click="form.photo = ''"><img
-                                                src="/image/modal/closeInput.svg" alt=""></button></a>
-                                    <p @click="$refs.fileInput.click()">Студенческий</p>
+                                <div @click="$refs.fileInput.click()"
+                                    class="cursor-pointer text-[#8C8C8C] hover:text-[#6C6C6C] transition-colors">
+                                    <p v-if="!form.photo">Прикрепи фото</p>
+                                    <p v-else class="text-[#4C4C4C]">Прикрепи фото</p>
                                 </div>
                             </div>
-                            <button @click="$refs.fileInput.click()"><img src="/image/modal/File_Download.svg"
-                                    alt=""></button>
+                            <button><img src="/image/modal/File_Download.svg" alt=""></button>
                         </div>
-
+                        <a class="bg-[#F2F2F2] px-2 py-1.5 text-TeriaryDark font-medium rounded-2xl" :href="form.photo"
+                            target="_blank" v-if="form.photo">Фото.png</a>
                     </div>
                 </div>
-                <button @click="saveChanges"
+                <button @click="closeButton"
                     class="px-8 py-3 mt-8 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet">
                     Сохранить
                 </button>
@@ -70,64 +75,77 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import { useEditingStore } from '@/stores/useEditingStore';
+import EditingDataService from '@/services/EditingDataService';
 
+const universities = ref([]);
+const facilties = ref([]);
+const departments = ref([]);
+const educationForms = ref([]);
 const editingStore = useEditingStore();
 const emit = defineEmits(['close']);
 const fileInput = ref(null);
-const animation = ref(false)
-const form = ref({
-    university: '',
-    faculty: '',
-    department: '',
-    course: '',
-    speciality: '',
-    photo: '',
-})
+const animation = ref(false);
+const form = ref({ ...editingStore.profile });
+
 const handleFileUpdate = (event) => {
     const file = event.target.files[0];
     if (file) {
         form.value.photo = file;
     }
+};
+
+watch(form, (newForm) => {
+    editingStore.setChanges(newForm);
+}, { deep: true });
+
+const fetchFaculties = async () => {
+    try {
+        await EditingDataService.getFaculties(form.value.faculty).then((response) => {
+            facilties.value = response.data || [];
+        });
+    } catch (error) {
+        console.error("Ошибка при загрузке факультетов:", error);
+    }
 }
 
-watch(() => [editingStore.universities, editingStore.faculties, editingStore.departments, editingStore.edicationForms], (newProfile) => {
-    if (newProfile) {
-        form.value = {
-            university: editingStore.universities || '',
-            faculty: editingStore.faculties || '',
-            department: editingStore.departments || '',
-            course: editingStore.profile.profile.course || '',
-            speciality: editingStore.edicationForms || '',
-            photo: editingStore.profile.photo || '',
-        };
-    }
-}, { immediate: true })
-
-const saveChanges = async () => {
+const fetchDepartments = async () => {
     try {
-        await editingStore.updateProfile(form.value);
-        closeButton();
+        await EditingDataService.getDepartments(form.value.department).then((response) => {
+            departments.value = response.data || [];
+        });
     } catch (error) {
-        console.error('Ошибка при сохранении изменений:', error);
+        console.error("Ошибка при загрузке кафедр:", error);
+    }
+}
+
+const fetchEducationForms = async () => {
+    try {
+        await EditingDataService.getEducationForms(form.value.form_of_study).then((response) => {
+            educationForms.value = response.data || [];
+        });
+    } catch (error) {
+        console.error("Ошибка при загрузке уровней образования:", error);
     }
 }
 
 const closeButton = () => {
+    editingStore.setChanges(form.value);
     animation.value = true;
     setTimeout(() => {
         emit('close');
     }, 300);
-}
+};
 
 onMounted(async () => {
     await editingStore.getEducational();
-    form.value = {
-        university: editingStore.universities || '',
-        faculty: editingStore.faculties || '',
-        department: editingStore.departments || '',
-        course: editingStore.profile.profile.course || '',
-        speciality: editingStore.edicationForms || '',
-        photo: editingStore.profile.photo || '',
-    };
+    try {
+        const response = await EditingDataService.getUniversities(form.value.university);
+        universities.value = response.data || [];
+    } catch (error) {
+        console.error("Ошибка при загрузке университетов:", error);
+    }
+    fetchFaculties();
+    fetchDepartments();
+    fetchEducationForms();
 });
 </script>

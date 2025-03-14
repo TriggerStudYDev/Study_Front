@@ -1,4 +1,4 @@
-<!--  -->
+<!-- src/components/sign-in/register/EditQuestionnaire/ModalWindows/UserInfo.vue -->
 <template>
     <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
         :class="{ 'fade-out': animation }">
@@ -7,7 +7,7 @@
                 <img src="/image/auth/Close_MD.svg" alt="Close">
             </button>
             <div class="flex flex-col">
-                <h1 class="text-2xl font-semibold mt-2 text-PrimaryDark">Личная информация</h1>
+                <h1 class="mt-2 text-2xl font-semibold text-PrimaryDark">Личная информация</h1>
                 <p class="text-PrimaryDark">
                     Здесь хранятся твои основные данные: ФИО, почта и другие контактные данные. Убедись, что всё
                     актуально, чтобы
@@ -27,8 +27,8 @@
                     </div>
                     <div
                         class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input v-model="form.email" type="text" placeholder="Email*" class="w-full outline-none" />
-                        <button @click="form.email = ''"><img src="/image/modal/closeInput.svg" alt=""></button>
+                        <input v-model="form.email" type="text" placeholder="Email*" class="w-full outline-none"
+                            disabled />
                     </div>
                     <socialMedia @click="openModal('telegram')">
                         <template #image>
@@ -47,9 +47,9 @@
                         </template>
                     </socialMedia>
                 </div>
-                <button @click="saveChanges"
-                    class="px-8 py-3 bg-AccentViolet text-white rounded-lg text-xl font-medium leading-7 mt-8">
-                    Сохранить
+                <button @click="closeButton"
+                    class="px-8 py-3 mt-8 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet">
+                    Закрыть
                 </button>
             </div>
         </div>
@@ -65,44 +65,22 @@ import { useModalStore } from '@/stores/useModalStore';
 const editingStore = useEditingStore();
 const modalStore = useModalStore();
 const { openModal } = modalStore;
-const animation = ref(false)
-const form = ref({
-    first_name: '',
-    last_name: '',
-    email: '',
-});
+const animation = ref(false);
+const form = ref({ ...editingStore.profile });
 
+watch(
+    () => editingStore.profile,
+    (newProfile) => {
+        form.value = { ...newProfile };
+    },
+    { deep: true }
+);
 const closeButton = () => {
+    editingStore.setChanges(form.value);
     animation.value = true;
     setTimeout(() => {
         emit('close');
     }, 300);
-};
-
-
-watch(() => editingStore.profile, (newProfile) => {
-    if (newProfile) {
-        form.value = {
-            first_name: newProfile.user.first_name || '',
-            last_name: newProfile.user.last_name || '',
-            email: newProfile.user.email || '',
-        };
-    }
-}, { immediate: true });
-
-const saveChanges = async () => {
-    try {
-        const updatedData = {
-            ...form.value,
-            vk_profile: editingStore.profile.profile.vk_profile,
-            telegram_username: editingStore.profile.profile.telegram_username,
-        };
-
-        await editingStore.updateProfile(updatedData);
-        closeButton();
-    } catch (error) {
-        console.error('Ошибка при сохранении изменений:', error);
-    }
 };
 
 const emit = defineEmits(['close']);
