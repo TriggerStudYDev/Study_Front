@@ -22,6 +22,7 @@ export const useEditingStore = defineStore("editing", {
       department: null,
       form_of_study: null,
       discipline: [],
+      id_postPhoto: null,
     },
     initialProfile: {},
     university: null,
@@ -55,6 +56,7 @@ export const useEditingStore = defineStore("editing", {
           customer_feedback: this.user?.customer_feedback || [],
           portfolio: this.user?.portfolio || [],
           discipline: this.user.profile?.disciplines || [],
+          id_postPhoto: this.user?.id || null,
         };
         this.initialProfile = { ...this.profile };
         console.log("Получен профиль:", this.user);
