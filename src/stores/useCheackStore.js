@@ -25,8 +25,8 @@ export const useCheckStore = defineStore("check", {
 
     handleStatusResponse(status) {
       const statusMap = {
-        "На проверке": "sending-questionnaire",
-        "Повторная проверка": "sending-questionnaire",
+        "На проверке": "expectation-questionnaire",
+        "Повторная проверка": "expectation-questionnaire",
         "Отклонена верификация по СБ": "unshaked-questionnaire",
         "Отклонена анкета исполнителя": "unshaked-questionnaire",
         "Отправлен на доработку": "questionnaire",

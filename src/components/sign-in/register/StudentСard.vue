@@ -5,7 +5,7 @@
             <!-- Университеты -->
             <div class="col-span-2">
                 <select v-model="selectedUniversity" @change="fetchFaculties" :disabled="loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
+                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.universities }">
                     <option value="" disabled>ВУЗ</option>
                     <option v-for="university in universities" :key="university.id" :value="university.id">
@@ -34,7 +34,7 @@
             <div class="col-span-2">
                 <select v-model="selectedDepartment" @change="fetchEducationForms"
                     :disabled="!selectedFaculty || loading"
-                    class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
+                    class="w-full px-6 py-3 pr-10 bg-transparent border border-[#BFBFBF] text-TeriaryDark  bg-white font-sans rounded-lg font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.departments }">
                     <option value="" disabled>
                         {{ departments.length ? 'Выберите кафедру' : 'Нет доступных кафедр' }}

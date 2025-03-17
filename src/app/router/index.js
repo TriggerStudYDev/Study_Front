@@ -90,6 +90,15 @@ const settingProfile = [
           ),
         meta: { requiresRejection: true },
       },
+      {
+        name: "expectation-questionnaire",
+        path: "expectation-questionnaire",
+        component: () =>
+          import(
+            "@/components/sign-in/register/SettignProfile/ExpectationQuestionnaire.vue"
+          ),
+        meta: { requiresRejection: true },
+      },
     ],
   },
 ];

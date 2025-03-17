@@ -3,9 +3,14 @@
         <header class="px-[60px] py-6">
             <h1 class="text-4xl font-semibold text-white">LOGO</h1>
         </header>
-        <main class="max-w-[828px] mx-auto" :class="{ ' opacity-0': activeSocial || activeSocial === 'true' }">
+        <main class="max-w-[828px] mx-auto min-h-screen"
+            :class="{ ' opacity-0': activeSocial || activeSocial === 'true' }">
             <RouterView />
         </main>
+
+        <footer>
+            <Footer />
+        </footer>
         <div>
             <SocialCard v-if="activeSocial" :social-type="activeSocial" @close="handleClose" />
         </div>
@@ -14,6 +19,7 @@
 
 <script setup>
 import SocialCard from '@/components/sign-in/register/EditQuestionnaire/ModalWindows/SocialCard.vue';
+import Footer from '@/components/sign-in/widgets/FooterSign-in.vue'
 import { useModalStore } from '@/stores/useModalStore';
 import { useEditingStore } from '@/stores/useEditingStore';
 import { storeToRefs } from 'pinia';

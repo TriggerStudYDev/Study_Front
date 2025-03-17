@@ -1,9 +1,9 @@
 <template>
     <div class="inset-0 z-50 backface-hidden">
-        <div class="max-w-[510px] mx-auto bg-white rounded-3xl p-6 slide-up">
+        <div class="max-w-[542px] mx-auto bg-white rounded-3xl p-6 slide-up">
             <div class="flex flex-col justify-center">
                 <div class="mt-6">
-                    <h2 class="text-[40px] leading-[52px] font-semibold text-[#171717]">{{ pageContent[countPages].title
+                    <h2 class="text-[40px] leading-[52px] font-bold text-[#171717]">{{ pageContent[countPages].title
                         }}</h2>
                     <p class="text-[#171717] text-xl mt-2">{{ pageContent[countPages].description }}</p>
                 </div>
@@ -14,7 +14,7 @@
                         @update:isValid="isValid = $event" @file-selected="handleFileSelected"
                         @open-modal="$emit('open-modal')" />
                 </div>
-                <div class="flex flex-col mt-8 gap-x-4">
+                <div class="flex flex-col mt-10 gap-x-4">
                     <button class="px-8 py-3 text-xl font-medium leading-7 text-white rounded-lg bg-AccentViolet"
                         @click="handleClick">
                         {{ countPages === 3 ? 'Готово' : 'Продолжить' }}
@@ -37,7 +37,7 @@ import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const countPages = ref(1);
+const countPages = ref(3);
 const isValid = ref(false);
 const authStore = useAuthStore();
 const currentForm = ref(null);

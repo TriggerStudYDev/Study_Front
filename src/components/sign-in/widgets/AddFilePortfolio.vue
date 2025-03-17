@@ -1,21 +1,19 @@
 <!-- src/components/sign-in/widgets/AddFilePortfolio.vue -->
 <template>
     <div>
+        <input type="file" class="hidden" @change="handleFileChange" accept="image/*,.pdf" ref="fileInput" multiple>
         <slot name="input">
-            <div class="flex flex-col">
-                <input
-                    class="px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
-                    type="text" :value="inputValue" :placeholder="placeholder" :disabled="true">
-                <span class="px-4 mt-1 text-xs font-medium text-TeriaryDark">Подсказка PNG, JPG</span>
+            <div class="flex flex-col" @click="$refs.fileInput.click()">
+                <div class="flex items-center justify-between px-6 py-3 border border-[#BFBFBF] rounded-lg">
+                    <input class=" text-[#BFBFBF] font-medium focus:outline-none" type="text" :value="inputValue"
+                        :placeholder="placeholder" readonly>
+                    <button @click="$refs.fileInput.click()"><img src="/image/modal/File_Download.svg" alt=""></button>
+                </div>
+                <span class="px-4 mt-1 text-xs font-medium text-TeriaryDark">Прикрепи фото студенческого хорошего
+                    качества в формате PNG или JPEG</span>
             </div>
         </slot>
-        <input type="file" class="hidden" @change="handleFileChange" accept="image/*,.pdf" ref="fileInput" multiple>
-        <div class="flex flex-col items-center justify-center p-4 mt-2 cursor-pointer" @click="$refs.fileInput.click()">
-            <p class="flex items-center gap-x-2 text-center font-medium text-[#8C8C8E]">
-                Добавить файл
-                <img src="/image/auth/plus1.svg">
-            </p>
-        </div>
+
     </div>
 </template>
 <script setup>
@@ -23,7 +21,7 @@ import { ref, computed } from 'vue';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 const props = defineProps({
-    placeholder: { type: String, default: 'Загрузите файл' },
+    placeholder: { type: String, default: 'Портфолио' },
     fileType: { type: String, required: true },
 });
 

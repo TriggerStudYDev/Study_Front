@@ -2,33 +2,40 @@
 <template>
     <div class="">
         <div class="grid grid-cols-2 gap-4">
-            <input class="px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+            <input class="px-6 py-3 border border-[#BFBFBF] rounded-lg  font-medium focus:outline-none"
                 :class="{ 'border-red-500': errors.username }" type="text" placeholder="Логин*" v-model="auth.username">
-            <input class="px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+            <input class="px-6 py-3 border border-[#BFBFBF] rounded-lg  font-medium focus:outline-none"
                 :class="{ 'border-red-500': errors.last_name }" type="text" placeholder="Имя*" v-model="auth.last_name">
-            <input
-                class="col-span-2 px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+            <input class="col-span-2 px-6 py-3 border border-[#BFBFBF] rounded-lg  font-medium focus:outline-none"
                 :class="{ 'border-red-500': errors.first_name }" type="text" placeholder="Фамилия*"
                 v-model="auth.first_name">
             <div class="col-span-2">
-                <input
-                    class="w-full px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
+                <input class="w-full px-6 py-3 border border-[#BFBFBF] rounded-lg  font-medium focus:outline-none"
                     :class="{ 'border-red-500': errors.email }" type="email" placeholder="Email*" v-model="auth.email"
                     @input="errors.email = false">
                 <span v-if="errors.email" class="mt-1 text-sm text-red-500">Введите корректный email</span>
             </div>
             <div class="col-span-2">
-                <input
-                    class="w-full px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
-                    :class="{ 'border-red-500': errors.password }" type="password" placeholder="Пароль*"
-                    v-model="auth.password">
+                <div class="flex justify-between items-center px-6 py-3 border border-[#BFBFBF] rounded-lg"
+                    :class="{ 'border-red-500': errors.password }">
+                    <input class="w-full font-medium focus:outline-none" :type="VisiblePassword ? 'text' : 'password'"
+                        placeholder="Пароль*" v-model="auth.password">
+                    <button type="button" @click="VisiblePassword = !VisiblePassword"><img
+                            :src="VisiblePassword ? '/image/profile/EyeOpen.svg' : '/image/profile/EyeClose.svg'"
+                            alt=""></button>
+                </div>
                 <span v-if="errors.password" class="mt-1 text-sm text-red-500">Введите пароль</span>
             </div>
             <div class="col-span-2">
-                <input
-                    class="w-full px-6 py-3 border border-[#BFBFBF] rounded-lg text-[#BFBFBF] font-medium focus:outline-none"
-                    :class="{ 'border-red-500': errors.password_repeat }" type="password"
-                    placeholder="Повторите пароль*" v-model="passwordRepeat">
+                <div class="flex justify-between items-center px-6 py-3 border border-[#BFBFBF] rounded-lg"
+                    :class="{ 'border-red-500': errors.password_repeat }">
+                    <input class="w-full font-medium focus:outline-none"
+                        :type="VisiblePasswordRepeat ? 'text' : 'password'" placeholder="Повторите пароль*"
+                        v-model="passwordRepeat">
+                    <button type="button" @click="VisiblePasswordRepeat = !VisiblePasswordRepeat"><img
+                            :src="VisiblePasswordRepeat ? '/image/profile/EyeOpen.svg' : '/image/profile/EyeClose.svg'"
+                            alt="Icons"></button>
+                </div>
                 <span v-if="errors.password_repeat" class="mt-1 text-sm text-red-500">Пароли не совпадают</span>
             </div>
         </div>
@@ -80,6 +87,8 @@ import BoxingCheckForReg from '@/ui/BoxingCheckForReg.vue';
 const emit = defineEmits(['update:isValid', 'next-step', 'prev-step', 'toggle-auth', 'open-modal']);
 const authStore = useAuthStore();
 const auth = computed(() => authStore.data.user);
+const VisiblePassword = ref(false);
+const VisiblePasswordRepeat = ref(false);
 const isDataLoaded = ref(false);
 const passwordRepeat = ref('');
 const isAgreementChecked = ref(false);

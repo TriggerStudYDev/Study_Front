@@ -169,7 +169,6 @@ const loading = ref(false);
 const emit = defineEmits(['close']);
 const form = ref({ ...editingStore.profile });
 
-// Watchers
 watch(selectedUniversity, async (newVal) => {
     if (newVal) {
         form.value.university = newVal;
@@ -195,7 +194,6 @@ watch(selectedEducationForm, (newVal) => {
     if (newVal) form.value.form_of_study = newVal;
 });
 
-// Methods
 const clearUniversity = () => {
     form.value.university = null;
     university.value = null;

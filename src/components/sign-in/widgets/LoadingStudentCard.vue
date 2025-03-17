@@ -1,16 +1,20 @@
 <template>
     <div class="">
         <input type="file" class="hidden" @change="handleFileChange" accept="image/*,.pdf" ref="fileInput">
-        <div class="w-full px-6 py-3 bg-transparent border border-[#BFBFBF] bg-white font-sans rounded-lg font-medium text-TeriaryDark cursor-pointer text-bse focus:outline-none"
-            @click="$refs.fileInput.click()">
-            <p class="">
-                <span v-if="!fileSelected">Фото студенческого</span>
-                <span v-else class="">
-                    Выбран файл: {{ fileName }}
-                </span>
-            </p>
+        <div class="flex px-6 py-3 bg-transparent border border-[#BFBFBF] bg-white rounded-lg ">
+            <div class="w-full font-sans font-medium cursor-pointer text-TeriaryDark text-bse focus:outline-none"
+                @click="$refs.fileInput.click()">
+                <p class="">
+                    <span v-if="!fileSelected">Студенческий</span>
+                    <span v-else class="">
+                        Выбран файл: {{ fileName }}
+                    </span>
+                </p>
+            </div>
+            <button @click="$refs.fileInput.click()"><img src="/image/modal/File_Download.svg" alt=""></button>
         </div>
-        <span class="px-4 mt-1 text-xs font-medium text-TeriaryDark">Подсказка PNG, JPG</span>
+        <span class="px-4 mt-1 text-xs font-medium text-TeriaryDark">Прикрепи фото студенческого хорошего качества в
+            формате PNG или JPEG</span>
     </div>
 </template>
 

@@ -1,10 +1,10 @@
 <!-- src/components/sign-in/register/RegistrationSummary.vue -->
 <template>
     <div>
-        <div class="grid grid-cols-1 gap-4 mt-8">
+        <div class="grid grid-cols-1 gap-4">
             <div class="flex flex-col">
-                <DisciplineSelector v-model="selectDicsipline" :disciplines="descipline"
-                    placeholder="Какие дисциплины вы решаете" :error="errors.selectDicsipline" />
+                <DisciplineSelector v-model="selectDicsipline" :disciplines="descipline" placeholder="Дисциплина"
+                    :error="errors.selectDicsipline" />
                 <span v-if="errors.selectDicsipline" class="text-sm text-red-500">
                     {{ errors.selectDicsipline }}
                 </span>
@@ -18,8 +18,8 @@
                 <span v-if="errors.about_self" class="mt-1 text-sm text-red-500">Введите о себе</span>
             </div>
 
-            <AddFileReviews />
-            <AddFilePortfolio />
+            <AddFileReviews class="cursor-pointer" />
+            <AddFilePortfolio class="cursor-pointer" />
         </div>
     </div>
 </template>

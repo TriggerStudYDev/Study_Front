@@ -10,6 +10,7 @@ export default {
         TeriaryDark: "#BFBFBF",
         AccentGreen: "#CAF272",
         DisabledDark: "#F2F2F2",
+        SecondaryDark: "#404040",
       },
     },
   },

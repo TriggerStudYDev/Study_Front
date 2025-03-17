@@ -22,7 +22,10 @@
                     </div>
                     <div
                         class="col-span-2 flex justify-between items-center px-4 py-3 border border-[#8C8C8C] rounded-xl">
-                        <input class="w-full outline-none" type="text" placeholder="О себе" v-model="form.about_self">
+                        <textarea rows="4" maxlength="500" class="w-full outline-none" type="text" placeholder="О себе"
+                            v-model="form.about_self">
+
+                        </textarea>
                     </div>
                     <div class="col-span-2">
                         <div
@@ -91,8 +94,18 @@ import EditingDataService from '@/services/EditingDataService';
 const editingStore = useEditingStore();
 const disciplines = ref([]);
 const animation = ref(false);
+const fileInputCustomerFeedback = ref(null);
+const fileInputPortfolio = ref(null);
 const emit = defineEmits(['close']);
-const form = ref({ ...editingStore.profile });
+const form = ref({
+    ...editingStore.profile,
+    // customer_feedback: editingStore.profile.customer_feedback?.length
+    //     ? [...editingStore.profile.customer_feedback]
+    //     : [],
+    // portfolio: editingStore.profile.portfolio?.length
+    //     ? [...editingStore.profile.portfolio]
+    //     : []
+});
 
 onMounted(async () => {
     try {
@@ -100,13 +113,13 @@ onMounted(async () => {
             disciplines.value = response.data || [];
         }));
     } catch (error) {
-
+        console.error("Ошибка при загрузке данных:", error);
     }
-    form.value = {
-        ...editingStore.profile,
-        customer_feedback: editingStore.profile.customer_feedback || [],
-        portfolio: editingStore.profile.portfolio || []
-    };
+    // form.value = {
+    //     ...editingStore.profile,
+    //     // customer_feedback: editingStore.profile.customer_feedback || [],
+    //     // portfolio: editingStore.profile.portfolio || []
+    // };
 });
 
 watch(form, (newForm) => {
@@ -115,32 +128,36 @@ watch(form, (newForm) => {
 
 const handleFileUpdateCustomerFeedback = (event) => {
     const files = event.target.files;
-    if (files && files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-            reader.onload = () => {
-                form.value.customer_feedback.push({ photo: reader.result });
-            };
-            reader.readAsDataURL(file);
-        }
-        console.log("Файлы успешно загружены в отзывы заказчиков");
-    }
+    if (!files.length) return;
+
+    // Создаем копию массива для реактивности
+    const newFeedback = [...form.value.customer_feedback];
+
+    Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            newFeedback.push({ photo: reader.result });
+            // Обновляем массив целиком для триггера реактивности
+            form.value.customer_feedback = [...newFeedback];
+        };
+        reader.readAsDataURL(file);
+    });
 };
 
 const handleFileUpdateProfile = (event) => {
     const files = event.target.files;
-    if (files && files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-            reader.onload = () => {
-                form.value.portfolio.push({ photo: reader.result });
-            };
-            reader.readAsDataURL(file);
-        }
-        console.log("Файлы успешно загружены в портфолио");
-    }
+    if (!files.length) return;
+
+    const newPortfolio = [...form.value.portfolio];
+
+    Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            newPortfolio.push({ photo: reader.result });
+            form.value.portfolio = [...newPortfolio];
+        };
+        reader.readAsDataURL(file);
+    });
 };
 
 const closeButton = () => {
