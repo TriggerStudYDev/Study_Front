@@ -4,7 +4,7 @@
             <div class="flex flex-col justify-center">
                 <div class="mt-6">
                     <h2 class="text-[40px] leading-[52px] font-bold text-[#171717]">{{ pageContent[countPages].title
-                        }}</h2>
+                    }}</h2>
                     <p class="text-[#171717] text-xl mt-2">{{ pageContent[countPages].description }}</p>
                 </div>
                 <div class="flex flex-col w-full mt-8">
@@ -37,7 +37,7 @@ import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const countPages = ref(3);
+const countPages = ref(1);
 const isValid = ref(false);
 const authStore = useAuthStore();
 const currentForm = ref(null);

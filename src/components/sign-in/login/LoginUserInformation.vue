@@ -24,7 +24,8 @@
                 <span v-if="error.password" class="text-sm text-red-500">{{ error.password }}</span>
             </div>
             <div class="flex items-center">
-                <input type="checkbox" id="rememberMe" name="rememberMe" class="w-5 h-5 mr-2 border-TeriaryDark">
+                <input v-model="rememberMe" type="checkbox" id="rememberMe" name="rememberMe"
+                    class="w-5 h-5 mr-2 border-TeriaryDark">
                 <label for="rememberMe" class="text-sm text-SecondaryDark">Запомнить меня</label>
             </div>
         </div>
@@ -41,6 +42,7 @@
 <script setup>
 import { useAuthStore } from '@/stores/useAuthStore';
 import { ref } from 'vue';
+import Cookies from 'js-cookie';
 
 const emit = defineEmits(['toggle-auth']);
 const authStore = useAuthStore()
@@ -49,7 +51,9 @@ const error = ref({
     password: '',
 });
 
+
 const VisiblePassword = ref(false);
+const rememberMe = ref(false);
 
 const validateForm = () => {
     error.value = {
@@ -69,7 +73,7 @@ defineProps({
 const handleLogin = async () => {
     if (!validateForm()) return;
     try {
-        const result = await authStore.login();
+        const result = await authStore.login(rememberMe.value);
         if (result.success) {
             authStore.checkAuth()
         } else {

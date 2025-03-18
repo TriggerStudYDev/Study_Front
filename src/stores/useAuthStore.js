@@ -3,6 +3,7 @@ import { useRoute } from "vue-router";
 import userDataService from "@/services/UserDataService";
 import { useCheckStore } from "./useCheackStore";
 import router from "@/app/router";
+import Cookies from "js-cookie";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -161,7 +162,7 @@ export const useAuthStore = defineStore("auth", {
         throw error;
       }
     },
-    async login() {
+    async login(rememberMe) {
       const data = {
         username: this.data.user.username,
         password: this.data.user.password,
@@ -170,9 +171,18 @@ export const useAuthStore = defineStore("auth", {
       try {
         const response = await userDataService.postLogin(data);
 
+        if (rememberMe) {
+          Cookies.set("access_token", response.data.access_token, {
+            expires: 7,
+          });
+        } else {
+          Cookies.set("access_token", response.data.access_token);
+        }
+
         sessionStorage.setItem("access_token", response.data.access_token);
         sessionStorage.setItem("user", response.data.user.role);
         localStorage.setItem("user_id", response.data.user.id);
+        Cookies.set("user", response.data.user.role, { expires: 7 });
 
         this.isAuth = true;
         this.userRole = response.data.user.role;
@@ -195,7 +205,8 @@ export const useAuthStore = defineStore("auth", {
     },
 
     checkAuth() {
-      const token = sessionStorage.getItem("access_token");
+      // const token = sessionStorage.getItem("access_token");
+      const token = Cookies.get("access_token");
       const role = sessionStorage.getItem("user");
       this.userRole = role;
       this.isAuth = !!token;
@@ -206,6 +217,7 @@ export const useAuthStore = defineStore("auth", {
       sessionStorage.removeItem("access_token");
       sessionStorage.removeItem("user");
       localStorage.removeItem("user_id");
+      Cookies.remove("access_token");
       this.userRole = null;
       this.isAuth = false;
       router.push({ name: "login" });

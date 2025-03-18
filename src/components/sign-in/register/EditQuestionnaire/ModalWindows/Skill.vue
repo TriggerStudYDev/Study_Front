@@ -99,12 +99,8 @@ const fileInputPortfolio = ref(null);
 const emit = defineEmits(['close']);
 const form = ref({
     ...editingStore.profile,
-    // customer_feedback: editingStore.profile.customer_feedback?.length
-    //     ? [...editingStore.profile.customer_feedback]
-    //     : [],
-    // portfolio: editingStore.profile.portfolio?.length
-    //     ? [...editingStore.profile.portfolio]
-    //     : []
+    customer_feedback: editingStore.profile.customer_feedback || [],
+    portfolio: editingStore.profile.portfolio || []
 });
 
 onMounted(async () => {
@@ -122,23 +118,26 @@ onMounted(async () => {
     // };
 });
 
-watch(form, (newForm) => {
-    editingStore.setChanges(newForm);
-}, { deep: true });
+watch(
+    () => form.value,
+    (newForm) => {
+        editingStore.setChanges(newForm);
+    },
+    { deep: true }
+);
 
 const handleFileUpdateCustomerFeedback = (event) => {
     const files = event.target.files;
     if (!files.length) return;
 
-    // Создаем копию массива для реактивности
-    const newFeedback = [...form.value.customer_feedback];
-
     Array.from(files).forEach(file => {
         const reader = new FileReader();
         reader.onload = () => {
-            newFeedback.push({ photo: reader.result });
-            // Обновляем массив целиком для триггера реактивности
-            form.value.customer_feedback = [...newFeedback];
+            // Создаем новый массив для реактивности
+            form.value.customer_feedback = [
+                ...form.value.customer_feedback,
+                { photo: reader.result }
+            ];
         };
         reader.readAsDataURL(file);
     });
@@ -148,13 +147,14 @@ const handleFileUpdateProfile = (event) => {
     const files = event.target.files;
     if (!files.length) return;
 
-    const newPortfolio = [...form.value.portfolio];
-
     Array.from(files).forEach(file => {
         const reader = new FileReader();
         reader.onload = () => {
-            newPortfolio.push({ photo: reader.result });
-            form.value.portfolio = [...newPortfolio];
+            // Создаем новый массив для реактивности
+            form.value.portfolio = [
+                ...form.value.portfolio,
+                { photo: reader.result }
+            ];
         };
         reader.readAsDataURL(file);
     });
