@@ -6,7 +6,7 @@
 
 <script setup>
 import { useUserStore } from '@/stores';
-import TheModalUser from '@/components/admin/TheModalUser.vue';
+import TheModalUser from '@/components/admin/modal/TheModalUser.vue';
 
 
 const userStore = useUserStore();

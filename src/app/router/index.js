@@ -186,6 +186,19 @@ const adminRoutes = [
   },
 ];
 
+// const modalAdminRoutes = [
+//   {
+//     path: "adminModalPanel",
+//     children: [
+//       {
+//         path: "",
+//         component: () => import("@/components/admin/modal/TheModalUser.vue"),
+//         children: [{}],
+//       },
+//     ],
+//   },
+// ];
+
 const orderRoutes = [
   {
     path: "myBegunOrder",
